@@ -1,97 +1,33 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import DebateModal from "../components/DebateModal";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 import heroImage from "../assets/IMG1.png";
+import "../styles/HomePage.css";
 
-function HomePage() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+function HomePage({ user, onLogout, onStartDebate }) {
   const navigate = useNavigate();
-
-  const handleStartDebate = () => {
-    setShowModal(true);
-    setIsMenuOpen(false);
-  };
-
-  const handleTopicPositionSelected = (topic, position) => {
-    localStorage.setItem("debateTopic", topic);
-    localStorage.setItem("userPosition", position);
-    setShowModal(false);
-    navigate("/difficulty");
-  };
 
   return (
     <>
-      <header>
-        <div className="container">
-          <nav className="navbar">
-            <a href="#top" className="logo">
-              DiBot.AI✨
-            </a>
-
-            <ul className={`nav-links${isMenuOpen ? " active" : ""}`}>
-              <li>
-                <a href="#features" onClick={() => setIsMenuOpen(false)}>
-                  Features
-                </a>
-              </li>
-              <li>
-                <a href="#how-it-works" onClick={() => setIsMenuOpen(false)}>
-                  How It Works
-                </a>
-              </li>
-              <li>
-                <a href="#testimonials" onClick={() => setIsMenuOpen(false)}>
-                  Testimonials
-                </a>
-              </li>
-            </ul>
-
-            <div className="nav-actions">
-              <button
-                type="button"
-                className="btn start-debate-btn"
-                onClick={handleStartDebate}
-              >
-                Start Debating
-              </button>
-              <button
-                type="button"
-                className="mobile-toggle"
-                onClick={() => setIsMenuOpen((open) => !open)}
-                aria-label="Toggle navigation"
-              >
-                <i className="fas fa-bars" />
-              </button>
-            </div>
-          </nav>
-        </div>
-      </header>
+      <Header onStartDebate={onStartDebate} user={user} onLogout={onLogout} />
 
       <main id="top">
         <section className="hero">
           <div className="container">
             <div className="hero-content">
               <div className="hero-text">
-                <h1>The Transparent AI Debate Partner</h1>
+                <h1 className="hero-title-animated">
+                  The Transparent 
+                  <br />
+                  AI Debate Partner
+                </h1>
                 <p>
                   Sharpen your critical thinking skills through intelligent
                   debate practice. See exactly how AI analyzes your arguments
                   and learn to think more clearly.
                 </p>
-
-                <div className="hero-actions">
-                  <button
-                    type="button"
-                    className="btn start-debate-btn"
-                    onClick={handleStartDebate}
-                  >
-                    Start Your First Debate
-                  </button>
-                  <a href="#how-it-works" className="btn btn-secondary">
-                    See How It Works
-                  </a>
-                </div>
               </div>
 
               <div className="hero-image">
@@ -101,6 +37,7 @@ function HomePage() {
           </div>
         </section>
 
+        {/* ... features section ... */}
         <section id="features" className="section features">
           <div className="container">
             <div className="section-title">
@@ -191,8 +128,8 @@ function HomePage() {
               <p>A simple 4-step process to better thinking</p>
             </div>
 
-            <div className="steps">
-              <div className="step">
+            <div className="steps-grid">
+              <div className="step-card">
                 <div className="step-number">1</div>
                 <h3>Choose Topic</h3>
                 <p>
@@ -201,7 +138,7 @@ function HomePage() {
                 </p>
               </div>
 
-              <div className="step">
+              <div className="step-card">
                 <div className="step-number">2</div>
                 <h3>Set Difficulty</h3>
                 <p>
@@ -210,7 +147,7 @@ function HomePage() {
                 </p>
               </div>
 
-              <div className="step">
+              <div className="step-card">
                 <div className="step-number">3</div>
                 <h3>Debate &amp; Learn</h3>
                 <p>
@@ -219,7 +156,7 @@ function HomePage() {
                 </p>
               </div>
 
-              <div className="step">
+              <div className="step-card">
                 <div className="step-number">4</div>
                 <h3>Get Feedback</h3>
                 <p>
@@ -238,56 +175,155 @@ function HomePage() {
               <p>Join thousands improving their critical thinking</p>
             </div>
 
-            <div className="testimonial-grid">
-              <article className="testimonial-card">
-                <div className="testimonial-content">
-                  "DiBot.AI helped me understand my own reasoning patterns. The
-                  transparency feature is incredible! I've become much better at
-                  structuring arguments in my law classes."
-                </div>
-                <div className="testimonial-author">
-                  <div className="author-avatar">SC</div>
-                  <div className="author-info">
-                    <h4>Sarah Chen</h4>
-                    <p>Philosophy Student</p>
+            <div className="testimonial-marquee-container">
+              <div className="testimonial-marquee">
+                {/* First Set */}
+                <article className="testimonial-card">
+                  <div className="testimonial-content">
+                    "The logic visualization helps our junior devs understand AI
+                    reasoning better than any other tool. It's like having a senior
+                    architect auditing in real-time."
                   </div>
-                </div>
-              </article>
+                  <div className="testimonial-author">
+                    <div className="author-avatar teal-glow">
+                      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop" alt="Arjun Varma" />
+                    </div>
+                    <div className="author-info">
+                      <h4>Arjun Varma</h4>
+                      <p>Tech Lead, Hyderabad</p>
+                    </div>
+                  </div>
+                </article>
 
-              <article className="testimonial-card">
-                <div className="testimonial-content">
-                  "I use DiBot.AI with my students. The fallacy detection and
-                  real-time feedback are game-changers. My students' critical
-                  thinking skills have improved dramatically."
-                </div>
-                <div className="testimonial-author">
-                  <div className="author-avatar">MR</div>
-                  <div className="author-info">
-                    <h4>Marcus Rodriguez</h4>
-                    <p>Debate Coach</p>
+                <article className="testimonial-card">
+                  <div className="testimonial-content">
+                    "Identifying subtle biases in sources is now a 5-minute task.
+                    DiBot is part of my daily research. The transparency it offers is
+                    unmatched in the industry."
                   </div>
-                </div>
-              </article>
+                  <div className="testimonial-author">
+                    <div className="author-avatar red-glow">
+                      <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop" alt="Priya Patel" />
+                    </div>
+                    <div className="author-info">
+                      <h4>Priya Patel</h4>
+                      <p>Journalist, Ahmedabad</p>
+                    </div>
+                  </div>
+                </article>
 
-              <article className="testimonial-card">
-                <div className="testimonial-content">
-                  "Finally, an AI tool that teaches rather than just responds.
-                  The engine room is brilliant. It shows the reasoning process,
-                  not just the final answer."
-                </div>
-                <div className="testimonial-author">
-                  <div className="author-avatar">EW</div>
-                  <div className="author-info">
-                    <h4>Dr. Emily Watson</h4>
-                    <p>Critical Thinking Professor</p>
+                <article className="testimonial-card">
+                  <div className="testimonial-content">
+                    "DiBot.AI helped me understand my own reasoning patterns.
+                    The transparency feature is incredible! I've become much more
+                    confident in structuring arguments for my classes."
                   </div>
-                </div>
-              </article>
+                  <div className="testimonial-author">
+                    <div className="author-avatar purple-glow">
+                      <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop" alt="Sneha Sharma" />
+                    </div>
+                    <div className="author-info">
+                      <h4>Sneha Sharma</h4>
+                      <p>Philosophy Student, Delhi</p>
+                    </div>
+                  </div>
+                </article>
+
+                <article className="testimonial-card">
+                  <div className="testimonial-content">
+                    "Finally, an AI tool that teaches rather than just responds.
+                    The transparency engine is brilliant. It shows the process,
+                    not just the final answer."
+                  </div>
+                  <div className="testimonial-author">
+                    <div className="author-avatar blue-glow">
+                      <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop" alt="Marcus Rodriguez" />
+                    </div>
+                    <div className="author-info">
+                      <h4>Marcus Rodriguez</h4>
+                      <p>Debate Coach, Kolkata</p>
+                    </div>
+                  </div>
+                </article>
+
+                {/* Second Set for seamless loop */}
+                <article className="testimonial-card">
+                  <div className="testimonial-content">
+                    "The logic visualization helps our junior devs understand AI
+                    reasoning better than any other tool. It's like having a senior
+                    architect auditing in real-time."
+                  </div>
+                  <div className="testimonial-author">
+                    <div className="author-avatar teal-glow">
+                      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop" alt="Arjun Varma" />
+                    </div>
+                    <div className="author-info">
+                      <h4>Arjun Varma</h4>
+                      <p>Tech Lead, Hyderabad</p>
+                    </div>
+                  </div>
+                </article>
+
+                <article className="testimonial-card">
+                  <div className="testimonial-content">
+                    "Identifying subtle biases in sources is now a 5-minute task.
+                    DiBot is part of my daily research. The transparency it offers is
+                    unmatched in the industry."
+                  </div>
+                  <div className="testimonial-author">
+                    <div className="author-avatar red-glow">
+                      <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop" alt="Priya Patel" />
+                    </div>
+                    <div className="author-info">
+                      <h4>Priya Patel</h4>
+                      <p>Journalist, Ahmedabad</p>
+                    </div>
+                  </div>
+                </article>
+
+                <article className="testimonial-card">
+                  <div className="testimonial-content">
+                    "DiBot.AI helped me understand my own reasoning patterns.
+                    The transparency feature is incredible! I've become much more
+                    confident in structuring arguments for my classes."
+                  </div>
+                  <div className="testimonial-author">
+                    <div className="author-avatar purple-glow">
+                      <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop" alt="Sneha Sharma" />
+                    </div>
+                    <div className="author-info">
+                      <h4>Sneha Sharma</h4>
+                      <p>Philosophy Student, Delhi</p>
+                    </div>
+                  </div>
+                </article>
+
+                <article className="testimonial-card">
+                  <div className="testimonial-content">
+                    "Finally, an AI tool that teaches rather than just responds.
+                    The transparency engine is brilliant. It shows the process,
+                    not just the final answer."
+                  </div>
+                  <div className="testimonial-author">
+                    <div className="author-avatar blue-glow">
+                      <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop" alt="Marcus Rodriguez" />
+                    </div>
+                    <div className="author-info">
+                      <h4>Marcus Rodriguez</h4>
+                      <p>Debate Coach, Kolkata</p>
+                    </div>
+                  </div>
+                </article>
+              </div>
             </div>
           </div>
         </section>
 
         <section id="cta" className="cta">
+          <div className="cta-bg-glow">
+            <div className="cta-blob cta-blob-1"></div>
+            <div className="cta-blob cta-blob-2"></div>
+          </div>
           <div className="container">
             <h2>Ready to Think Better?</h2>
             <p>
@@ -295,9 +331,8 @@ function HomePage() {
               It&apos;s free to try and takes less than a minute to begin.
             </p>
             <button
-              type="button"
+              onClick={onStartDebate}
               className="btn start-debate-btn"
-              onClick={handleStartDebate}
             >
               Begin Your First Debate
             </button>
@@ -305,101 +340,7 @@ function HomePage() {
         </section>
       </main>
 
-      <footer>
-        <div className="container">
-          <div className="footer-content">
-            <div className="footer-column">
-              <h3>DiBot.AI</h3>
-              <p>
-                The transparent AI debate partner for critical thinking
-                education.
-              </p>
-              <div className="social-links">
-                <a href="#top" aria-label="Twitter">
-                  <i className="fab fa-twitter" />
-                </a>
-                <a href="#top" aria-label="Facebook">
-                  <i className="fab fa-facebook-f" />
-                </a>
-                <a href="#top" aria-label="LinkedIn">
-                  <i className="fab fa-linkedin-in" />
-                </a>
-                <a href="#top" aria-label="Instagram">
-                  <i className="fab fa-instagram" />
-                </a>
-              </div>
-            </div>
-
-            <div className="footer-column">
-              <h3>Features</h3>
-              <ul className="footer-links">
-                <li>
-                  <a href="#features">Transparent AI</a>
-                </li>
-                <li>
-                  <a href="#features">Fallacy Detection</a>
-                </li>
-                <li>
-                  <a href="#features">Performance Analytics</a>
-                </li>
-                <li>
-                  <a href="#features">Adaptive Difficulty</a>
-                </li>
-              </ul>
-            </div>
-
-            <div className="footer-column">
-              <h3>Resources</h3>
-              <ul className="footer-links">
-                <li>
-                  <a href="#how-it-works">How to Debate</a>
-                </li>
-                <li>
-                  <a href="#how-it-works">Logical Fallacies</a>
-                </li>
-                <li>
-                  <a href="#how-it-works">Critical Thinking</a>
-                </li>
-                <li>
-                  <a href="#top">Blog</a>
-                </li>
-              </ul>
-            </div>
-
-            <div className="footer-column">
-              <h3>Support</h3>
-              <ul className="footer-links">
-                <li>
-                  <a href="#top">Help Center</a>
-                </li>
-                <li>
-                  <a href="#top">Contact Us</a>
-                </li>
-                <li>
-                  <a href="#top">Privacy Policy</a>
-                </li>
-                <li>
-                  <a href="#top">Terms of Service</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="footer-bottom">
-            <p>
-              &copy; 2026 DiBot.AI : All rights reserved | Powered by - DiBot.AI
-              ✨
-            </p>
-          </div>
-        </div>
-      </footer>
-
-      {showModal && (
-        <DebateModal
-          onClose={() => setShowModal(false)}
-          onSelect={handleTopicPositionSelected}
-        />
-      )}
+      <Footer />
     </>
   );
 }

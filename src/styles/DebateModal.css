@@ -1,0 +1,320 @@
+.debate-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.debate-modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.debate-modal-content {
+  width: 650px;
+  max-width: 95%;
+  height: auto;
+  max-height: 90vh;
+  background: linear-gradient(145deg, #15151a, #0a0a0d);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 40px;
+  padding: 1.5rem;
+  position: relative;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8), inset 0 0 50px rgba(255, 255, 255, 0.02);
+  transform: translateY(40px) scale(0.95);
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  overflow-y: auto;
+}
+
+.debate-modal-overlay.active .debate-modal-content {
+  transform: translateY(0) scale(1);
+}
+
+.debate-modal-close {
+  position: absolute;
+  top: 25px;
+  right: 30px;
+  background: transparent;
+  border: none;
+  color: #64748b;
+  font-size: 32px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.debate-modal-close:hover {
+  color: white;
+  transform: scale(1.1);
+}
+
+.modal-logo-area {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.modal-dibot-logo {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 1.8rem;
+  color: #ffffff;
+  letter-spacing: -1px;
+  background: linear-gradient(to bottom, #ffffff, #94a3b8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.modal-main-title {
+  font-family: 'Georgia', serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-align: center;
+  letter-spacing: 4px;
+  margin-bottom: 3rem;
+  text-transform: uppercase;
+}
+
+/* Tabs */
+.tab-container {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.tab-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  padding: 12px 30px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  letter-spacing: 1px;
+}
+
+.tab-btn.trending.active {
+  border-color: #22c55e;
+  background: rgba(34, 197, 94, 0.1);
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
+  color: #ffffff;
+}
+
+.tab-btn.custom.active {
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.1);
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
+  color: #ffffff;
+}
+
+/* Topic Grid */
+.trending-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+}
+
+.trending-topic-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 1.5rem;
+  color: #cbd5e1;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  display: flex;
+  align-items: center;
+  line-height: 1.4;
+}
+
+.trending-topic-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: scale(1.02);
+  color: #ffffff;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Custom Topic View */
+.custom-topic-view {
+  padding: 1rem;
+}
+
+.custom-topic-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.custom-hint {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.custom-topic-form textarea {
+  width: 100%;
+  min-height: 150px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 1.5rem;
+  color: white;
+  font-size: 1.1rem;
+  resize: vertical;
+  font-family: inherit;
+  transition: border-color 0.3s ease;
+}
+
+.custom-topic-form textarea:focus {
+  outline: none;
+  border-color: #f59e0b;
+}
+
+/* Position Selection View */
+.position-selection-view {
+  text-align: center;
+  padding: 1rem;
+}
+
+.selected-topic-display {
+  font-family: 'Georgia', serif;
+  font-style: italic;
+  font-size: 1.4rem;
+  color: #ffffff;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.position-prompt {
+  font-size: 1rem;
+  color: #94a3b8;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.position-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.pos-btn {
+  flex: 1;
+  max-width: 220px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  padding: 1.2rem 1rem;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pos-btn .pos-icon {
+  font-size: 1.8rem;
+  margin-bottom: 0.2rem;
+}
+
+.pos-btn .pos-text {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: white;
+}
+
+.pos-btn .pos-subtext {
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.pos-btn.for:hover {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: #22c55e;
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(34, 197, 94, 0.15);
+}
+
+.pos-btn.for .pos-icon { color: #22c55e; }
+
+.pos-btn.against:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #ef4444;
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(239, 68, 68, 0.15);
+}
+
+.pos-btn.against .pos-icon { color: #ef4444; }
+
+.back-link {
+  background: linear-gradient(
+    90deg, 
+    #64748b, 
+    #94a3b8, 
+    #4f8ef7, 
+    #a855f7, 
+    #64748b
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  animation: fluid-text 4s linear infinite;
+  text-decoration: none;
+}
+
+@keyframes fluid-text {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.back-link:hover {
+  transform: translateX(-5px) scale(1.05);
+  filter: brightness(1.3);
+}
+
+@media (max-width: 768px) {
+  .trending-grid {
+    grid-template-columns: 1fr;
+  }
+  .debate-modal-content {
+    padding: 2rem 1.5rem;
+  }
+  .modal-main-title {
+    font-size: 1.8rem;
+  }
+  .position-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+}
