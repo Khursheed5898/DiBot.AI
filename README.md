@@ -1,5 +1,7 @@
 # DiBot.AI 🌟
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Khursheed5898/DiBot.AI)
+
 DiBot.AI is a transparent AI debate partner designed to sharpen your critical thinking skills through intelligent debate practice. Unlike other AI tools, DiBot.AI is built specifically for education, letting you see exactly how the AI analyzes your arguments so you can learn to construct and deconstruct logic more effectively.
 
 ## Features ✨

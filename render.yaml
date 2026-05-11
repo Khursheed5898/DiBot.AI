@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: dibotai
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false # User must enter their MongoDB URI on connection
+      - key: GROQ_API_KEY
+        sync: false # User must enter their API Key on connection
+      - key: JWT_SECRET
+        generateValue: true # Automatically generate a secure random string
