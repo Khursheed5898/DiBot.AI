@@ -2,20 +2,64 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/DashboardPage.css';
 
-const DashboardPage = () => {
+import { getDebateHistory } from '../services/api';
+
+const DashboardPage = ({ user }) => {
+  const [loading, setLoading] = React.useState(true);
+  const [analytics, setAnalytics] = React.useState(null);
+  const [history, setHistory] = React.useState([]);
+
+  React.useEffect(() => {
+    const fetchHistory = async () => {
+      try {
+        const { data } = await getDebateHistory();
+        setAnalytics(data);
+        // Sort history by date descending (newest first)
+        if (data && data.performanceHistory) {
+          const sorted = [...data.performanceHistory].sort((a, b) => new Date(b.date) - new Date(a.date));
+          setHistory(sorted);
+        }
+      } catch (err) {
+        console.error("Error fetching dashboard data:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHistory();
+  }, []);
+
+  // Calculate dynamic derived stats
+  const averageScore = history.length > 0 
+    ? Math.round(history.reduce((sum, h) => sum + (h.score || 0), 0) / history.length) 
+    : 0;
+
   const stats = [
-    { label: 'SESSIONS PLAYED', value: '7', color: '#3b82f6' },
-    { label: 'AVG. CONFIDENCE', value: '75%', color: '#ffffff' },
-    { label: 'GLOBAL RANK', value: '#124', color: '#10b981' },
-    { label: 'DEBATE STREAK', value: '3 Days', color: '#ffffff' },
+    { label: 'SESSIONS PLAYED', value: analytics?.sessionsPlayed || history.length || '0', color: '#3b82f6' },
+    { label: 'AVG. CONFIDENCE', value: `${averageScore}%`, color: '#ffffff' },
+    { label: 'GLOBAL RANK', value: '#---', color: '#10b981' },
+    { label: 'LAST ACTIVE', value: analytics?.lastActive ? new Date(analytics.lastActive).toLocaleDateString() : 'Today', color: '#ffffff' },
   ];
 
-  const history = [
-    { id: 1, topic: 'AI Ethics in Warfare', date: '2024-04-22', score: 85, result: 'WIN' },
-    { id: 2, topic: 'Universal Basic Income', date: '2024-04-20', score: 72, result: 'WIN' },
-    { id: 3, topic: 'Space Colonization Priority', date: '2024-04-18', score: 64, result: 'LOSS' },
-    { id: 4, topic: 'Genetic Engineering Ethics', date: '2024-04-15', score: 78, result: 'WIN' },
-  ];
+  const userName = user?.username || user?.name || "Debater";
+  
+  // Safe Date Formatter
+  const formatDate = (dateStr) => {
+    try {
+      const d = new Date(dateStr);
+      const date = d.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      const time = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      return `${date} • ${time}`;
+    } catch (e) { return dateStr; }
+  };
+
+  if (loading) {
+    return (
+      <div className="dashboard-container" style={{display:'flex', justifyContent:'center', alignItems:'center', height:'100vh'}}>
+        <h2 style={{color: 'white'}}>Loading your metrics...</h2>
+      </div>
+    );
+  }
 
   return (
     <div className="dashboard-container">
@@ -27,11 +71,11 @@ const DashboardPage = () => {
         <div className="header-main">
           <div className="header-text">
             <h1 className="dashboard-title">Performance <span className="highlight">Dashboard</span></h1>
-            <p className="welcome-msg">Welcome back, <span className="user-name">Avid101</span>. Here is your debate logic analysis.</p>
+            <p className="welcome-msg">Welcome back, <span className="user-name">{userName}</span>. Here is your debate logic analysis.</p>
           </div>
           <div className="xp-card">
             <span className="xp-label">TOTAL XP</span>
-            <span className="xp-value">750</span>
+            <span className="xp-value">{analytics?.totalXp || (history.length * 100)}</span>
           </div>
         </div>
       </header>
@@ -120,22 +164,32 @@ const DashboardPage = () => {
               </tr>
             </thead>
             <tbody>
-              {history.map((item) => (
-                <tr key={item.id} className="history-row">
-                  <td className="topic-name">{item.topic}</td>
-                  <td className="date">{item.date}</td>
-                  <td className="score">
-                    <div className="score-bar-bg">
-                      <div className="score-bar-fill" style={{ width: `${item.score}%` }}></div>
-                    </div>
-                    {item.score}
-                  </td>
-                  <td className={`result ${item.result.toLowerCase()}`}>{item.result}</td>
-                  <td>
-                    <button className="btn-view">View Analysis</button>
+              {history.length === 0 ? (
+                <tr>
+                  <td colSpan="5" style={{textAlign:'center', padding:'2rem', color:'rgba(255,255,255,0.5)'}}>
+                    No debates played yet. Start your first debate!
                   </td>
                 </tr>
-              ))}
+              ) : (
+                history.map((item, index) => (
+                  <tr key={index} className="history-row">
+                    <td className="topic-name">{item.topic}</td>
+                    <td className="date">{formatDate(item.date)}</td>
+                    <td className="score">
+                      <div className="score-bar-bg">
+                        <div className="score-bar-fill" style={{ width: `${item.score || 0}%` }}></div>
+                      </div>
+                      {item.score || 0}
+                    </td>
+                    <td className={`result ${(item.score || 0) >= 50 ? 'win' : 'loss'}`}>
+                      {(item.score || 0) >= 50 ? 'WIN' : 'LOSS'}
+                    </td>
+                    <td>
+                      <button className="btn-view">View Analysis</button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

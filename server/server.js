@@ -7,6 +7,11 @@ import connectDB from "./config/db.js";
 import debateRoutes from "./routes/debateRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import { setupDebateHandlers } from "./handlers/debateHandler.js";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config({ path: "../.env" });
 dotenv.config();
@@ -41,6 +46,19 @@ app.use("/api/debate", debateRoutes);
 
 // Setup Socket handlers
 setupDebateHandlers(io);
+
+// Serve static files in production
+const distPath = path.join(__dirname, "../dist");
+app.use(express.static(distPath));
+
+// Catch-all handler to serve React application index.html
+app.get("*", (req, res) => {
+  res.sendFile(path.join(distPath, "index.html"), (err) => {
+    if (err) {
+      res.status(404).json({ error: "Dist directory not built. Run npm run build." });
+    }
+  });
+});
 
 // Global error handler
 app.use((err, req, res, next) => {

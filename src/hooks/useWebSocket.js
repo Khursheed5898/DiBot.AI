@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { io } from "socket.io-client";
 
-const SOCKET_SERVER_URL = import.meta.env.VITE_WS_URL || "http://localhost:5000";
+const SOCKET_SERVER_URL = import.meta.env.VITE_WS_URL || window.location.origin;
 
 export const useWebSocket = (debateId) => {
   const socketRef = useRef(null);

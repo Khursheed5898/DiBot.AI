@@ -826,6 +826,23 @@ function DebatePage({ user, onLogout, onStartDebate }) {
                       ))}
                     </div>
                   </div>
+
+                  <div className="feedback-section fallacies">
+                    <h4 className="feedback-section-title" style={{ color: '#f59e0b' }}>DETECTED FALLACIES</h4>
+                    <div className="feedback-list">
+                      {realAnalysis?.fallacies?.length > 0 ? (
+                        realAnalysis.fallacies.map((f, i) => (
+                          <div key={i} className="feedback-item">
+                            <span className="warn-icon">⚠️</span> {f}
+                          </div>
+                        ))
+                      ) : (
+                        <div className="feedback-item" style={{ opacity: 0.6 }}>
+                          <span className="check-icon">✓</span> Clean logic! No fallacies detected.
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
 

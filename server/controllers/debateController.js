@@ -10,7 +10,6 @@ async function saveSessionIfPossible(payload) {
       await Analytics.findOneAndUpdate(
         { userId: payload.userId },
         { 
-          $inc: { sessionsPlayed: 1 },
           $set: { lastActive: new Date() }
         },
         { upsert: true }
@@ -91,7 +90,12 @@ export async function endDebate(req, res) {
               feedback: analysis.feedback,
               date: new Date()
             }
-          }
+          },
+          $inc: { 
+            totalXp: Math.round(analysis.overallScore || 0),
+            sessionsPlayed: 1 
+          },
+          $set: { lastActive: new Date() }
         },
         { upsert: true }
       );
@@ -106,8 +110,16 @@ export async function endDebate(req, res) {
 
 export const getHistory = async (req, res) => {
   try {
-    const history = await DebateSession.find({ userId: req.user.id }).sort({ createdAt: -1 });
-    res.json(history);
+    const analytics = await Analytics.findOne({ userId: req.user.id });
+    
+    if (!analytics) {
+       return res.json({ 
+         sessionsPlayed: 0,
+         performanceHistory: [] 
+       });
+    }
+    
+    res.json(analytics);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

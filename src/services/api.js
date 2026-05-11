@@ -76,7 +76,8 @@ export async function endDebateSession(history, topic, difficulty) {
         overallScore: 0,
         feedback: "Could not retrieve detailed analysis. Great job finishing the debate!",
         strengths: ["Consistency"],
-        improvementAreas: ["Logic"]
+        improvementAreas: ["Logic"],
+        fallacies: []
       }
     };
   }

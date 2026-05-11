@@ -6,15 +6,15 @@
 - [x] MongoDB integration and JWT Auth.
 - [x] Gemini API integration for mock/real responses.
 
-## Phase 2: Debate Arena & Interface [IN PROGRESS]
+## Phase 2: Debate Arena & Interface [COMPLETED]
 - [x] Glassmorphism design language ("Mercury").
 - [x] Stance-reactive visual themes (FOR/AGAINST colors).
 - [x] Real-time metrics dashboard.
-- [/] **Adaptive Difficulty System**: Currently being refined.
-- [/] **GSD Integration**: Implementing spec-driven development.
+- [x] **Adaptive Difficulty System**: Fully operational across personas.
+- [x] **GSD Integration**: Unified Spec-Driven framework enforced.
 
-## Phase 3: Advanced Logic & Polish [PLANNED]
-- [ ] Deep Fallacy Detection engine.
+## Phase 3: Advanced Logic & Polish [IN PROGRESS]
+- [x] Deep Fallacy Detection engine: Evaluated at finale.
 - [ ] Exportable Debate Performance Reports.
 - [ ] Collaborative/Multi-user debate rooms.
 - [ ] Mobile-optimized layout.
