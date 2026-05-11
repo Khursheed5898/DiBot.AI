@@ -114,15 +114,22 @@ function DebatePage({ user, onLogout, onStartDebate }) {
     const voices = voicesRef.current;
 
     if (role === 'ai') {
-      const aiVoice = voices.find(v => v.name.includes('David') || v.name.includes('Google UK English Male') || v.lang === 'en-GB') || voices[0];
+      // Prioritize more natural sounding voices
+      const aiVoice = voices.find(v => v.name.includes('Google US English') || v.name.includes('Natural') || v.name.includes('Aria') || v.name.includes('Guy')) || 
+                      voices.find(v => v.name.includes('Google UK English Male') || v.lang.startsWith('en')) || 
+                      voices[0];
       utterance.voice = aiVoice;
-      utterance.pitch = 0.85;
-      utterance.rate = 1.0;
+      utterance.pitch = 0.95; // Less robotic, slightly deeper but conversational
+      utterance.rate = 0.92;  // Slightly relaxed pace for natural feel
+      utterance.volume = 1.0;
     } else {
-      const humanVoice = voices.find(v => v.name.includes('Mark') || v.name.includes('Google US English') || v.lang === 'en-US') || voices[0];
+      const humanVoice = voices.find(v => v.name.includes('Google UK English Female') || v.name.includes('Microsoft Zira') || v.name.includes('Zira')) || 
+                         voices.find(v => v.lang.startsWith('en')) || 
+                         voices[0];
       utterance.voice = humanVoice;
-      utterance.pitch = 1.05;
+      utterance.pitch = 1.0;
       utterance.rate = 0.95;
+      utterance.volume = 1.0;
     }
 
     // Sync Caption with Voice
