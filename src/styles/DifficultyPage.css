@@ -2,7 +2,8 @@
   min-height: 100vh;
   background-color: #0d0d0f;
   color: white;
-  padding-bottom: 5rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .difficulty-container {
@@ -10,10 +11,12 @@
   margin: 0 auto;
   padding: 4rem 2rem;
   text-align: center;
+  flex: 1 0 auto;
+  width: 100%;
 }
 
 .difficulty-title {
-  font-family: 'Georgia', serif;
+  font-family: "Georgia", serif;
   font-size: 3.5rem;
   font-weight: 700;
   color: #ffffff;
@@ -97,10 +100,26 @@
 }
 
 /* Color-Matched Glass Hover */
-.difficulty-card.beginner:hover { background: rgba(34, 197, 94, 0.05); border-color: rgba(34, 197, 94, 0.3); box-shadow: 0 15px 40px rgba(34, 197, 94, 0.1); }
-.difficulty-card.intermediate:hover { background: rgba(245, 158, 11, 0.05); border-color: rgba(245, 158, 11, 0.3); box-shadow: 0 15px 40px rgba(245, 158, 11, 0.1); }
-.difficulty-card.advanced:hover { background: rgba(239, 68, 68, 0.05); border-color: rgba(239, 68, 68, 0.3); box-shadow: 0 15px 40px rgba(239, 68, 68, 0.1); }
-.difficulty-card.expert:hover { background: rgba(168, 85, 247, 0.05); border-color: rgba(168, 85, 247, 0.3); box-shadow: 0 15px 40px rgba(168, 85, 247, 0.1); }
+.difficulty-card.beginner:hover {
+  background: rgba(34, 197, 94, 0.05);
+  border-color: rgba(34, 197, 94, 0.3);
+  box-shadow: 0 15px 40px rgba(34, 197, 94, 0.1);
+}
+.difficulty-card.intermediate:hover {
+  background: rgba(245, 158, 11, 0.05);
+  border-color: rgba(245, 158, 11, 0.3);
+  box-shadow: 0 15px 40px rgba(245, 158, 11, 0.1);
+}
+.difficulty-card.advanced:hover {
+  background: rgba(239, 68, 68, 0.05);
+  border-color: rgba(239, 68, 68, 0.3);
+  box-shadow: 0 15px 40px rgba(239, 68, 68, 0.1);
+}
+.difficulty-card.expert:hover {
+  background: rgba(168, 85, 247, 0.05);
+  border-color: rgba(168, 85, 247, 0.3);
+  box-shadow: 0 15px 40px rgba(168, 85, 247, 0.1);
+}
 
 /* Transparent Glass Selected State with Silver Pulse */
 .difficulty-card.active {
@@ -109,14 +128,22 @@
   backdrop-filter: blur(25px) !important;
   -webkit-backdrop-filter: blur(25px) !important;
   transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 255, 255, 0.1) !important;
+  box-shadow:
+    0 30px 60px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(255, 255, 255, 0.1) !important;
   animation: silver-pulse 0.6s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 @keyframes silver-pulse {
-  0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
-  70% { box-shadow: 0 0 0 20px rgba(255, 255, 255, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 20px rgba(255, 255, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
 }
 
 .card-header {
@@ -165,10 +192,22 @@
   transition: all 0.3s ease;
 }
 
-.beginner .meter-bar.fill { background: #22c55e; box-shadow: 0 0 10px rgba(34, 197, 94, 0.4); }
-.intermediate .meter-bar.fill { background: #f59e0b; box-shadow: 0 0 10px rgba(245, 158, 11, 0.4); }
-.advanced .meter-bar.fill { background: #ef4444; box-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
-.expert .meter-bar.fill { background: #a855f7; box-shadow: 0 0 10px rgba(168, 85, 247, 0.4); }
+.beginner .meter-bar.fill {
+  background: #22c55e;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.4);
+}
+.intermediate .meter-bar.fill {
+  background: #f59e0b;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+}
+.advanced .meter-bar.fill {
+  background: #ef4444;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+}
+.expert .meter-bar.fill {
+  background: #a855f7;
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
+}
 
 .card-description {
   font-size: 15px;
@@ -250,7 +289,9 @@
   transition: color 0.3s ease;
 }
 
-.round-card.active .round-count { color: #0d0d0f; }
+.round-card.active .round-count {
+  color: #0d0d0f;
+}
 
 .round-time {
   font-size: 12px;
@@ -259,7 +300,9 @@
   transition: color 0.3s ease;
 }
 
-.round-card.active .round-time { color: rgba(13, 13, 15, 0.7); }
+.round-card.active .round-time {
+  color: rgba(13, 13, 15, 0.7);
+}
 
 /* Difficulty Actions */
 .difficulty-actions {
@@ -288,10 +331,22 @@
 }
 
 /* Fluid Border/Background for Back Button */
-.btn-back.beginner { border-color: #22c55e; box-shadow: 0 0 15px rgba(34, 197, 94, 0.2); }
-.btn-back.intermediate { border-color: #f59e0b; box-shadow: 0 0 15px rgba(245, 158, 11, 0.2); }
-.btn-back.advanced { border-color: #ef4444; box-shadow: 0 0 15px rgba(239, 68, 68, 0.2); }
-.btn-back.expert { border-color: #a855f7; box-shadow: 0 0 15px rgba(168, 85, 247, 0.2); }
+.btn-back.beginner {
+  border-color: #22c55e;
+  box-shadow: 0 0 15px rgba(34, 197, 94, 0.2);
+}
+.btn-back.intermediate {
+  border-color: #f59e0b;
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.2);
+}
+.btn-back.advanced {
+  border-color: #ef4444;
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.2);
+}
+.btn-back.expert {
+  border-color: #a855f7;
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
+}
 
 .btn-proceed {
   background: linear-gradient(45deg, #4f8ef7, #a855f7, #4f8ef7);
@@ -309,25 +364,25 @@
 }
 
 /* Sync Proceed Button with Selected Difficulty */
-.btn-proceed.beginner { 
-  background: linear-gradient(45deg, #22c55e, #10b981, #22c55e); 
+.btn-proceed.beginner {
+  background: linear-gradient(45deg, #22c55e, #10b981, #22c55e);
   background-size: 200% auto;
-  box-shadow: 0 15px 35px rgba(34, 197, 94, 0.3); 
+  box-shadow: 0 15px 35px rgba(34, 197, 94, 0.3);
 }
-.btn-proceed.intermediate { 
-  background: linear-gradient(45deg, #f59e0b, #d97706, #f59e0b); 
+.btn-proceed.intermediate {
+  background: linear-gradient(45deg, #f59e0b, #d97706, #f59e0b);
   background-size: 200% auto;
-  box-shadow: 0 15px 35px rgba(245, 158, 11, 0.3); 
+  box-shadow: 0 15px 35px rgba(245, 158, 11, 0.3);
 }
-.btn-proceed.advanced { 
-  background: linear-gradient(45deg, #ef4444, #dc2626, #ef4444); 
+.btn-proceed.advanced {
+  background: linear-gradient(45deg, #ef4444, #dc2626, #ef4444);
   background-size: 200% auto;
-  box-shadow: 0 15px 35px rgba(239, 68, 68, 0.3); 
+  box-shadow: 0 15px 35px rgba(239, 68, 68, 0.3);
 }
-.btn-proceed.expert { 
-  background: linear-gradient(45deg, #a855f7, #7c3aed, #a855f7); 
+.btn-proceed.expert {
+  background: linear-gradient(45deg, #a855f7, #7c3aed, #a855f7);
   background-size: 200% auto;
-  box-shadow: 0 15px 35px rgba(168, 85, 247, 0.3); 
+  box-shadow: 0 15px 35px rgba(168, 85, 247, 0.3);
 }
 
 .btn-proceed:hover {
@@ -337,19 +392,158 @@
 }
 
 @keyframes btn-fluid-color {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 @keyframes pulse {
-  0% { opacity: 0.4; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.2); }
-  100% { opacity: 0.4; transform: scale(1); }
+  0% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
 }
 
 @media (max-width: 992px) {
-  .difficulty-cards-grid { grid-template-columns: 1fr; }
-  .rounds-grid { grid-template-columns: repeat(2, 1fr); }
-  .difficulty-title { font-size: 2.5rem; }
+  .difficulty-cards-grid {
+    grid-template-columns: 1fr;
+  }
+  .rounds-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .difficulty-title {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 1023px) {
+  .difficulty-page-root {
+    padding-bottom: 0 !important;
+  }
+
+  .difficulty-container {
+    padding: 1.2rem 0.8rem !important;
+  }
+
+  .difficulty-title {
+    font-size: 1.4rem !important;
+    letter-spacing: 0.5px !important;
+    margin-bottom: 0.8rem !important;
+  }
+
+  .topic-summary-pill {
+    padding: 6px 14px !important;
+    margin-bottom: 1.2rem !important;
+    gap: 0.6rem !important;
+    max-width: 100% !important;
+    border-radius: 20px !important;
+  }
+
+  .topic-text {
+    font-size: 11px !important;
+    line-height: 1.3 !important;
+  }
+
+  .stance-badge {
+    font-size: 9px !important;
+    padding: 3px 8px !important;
+  }
+
+  .difficulty-cards-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  @media (max-width: 600px) {
+    .difficulty-cards-grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
+
+  .difficulty-card {
+    padding: 1rem 0.9rem !important;
+    border-radius: 16px !important;
+  }
+
+  .card-label {
+    font-size: 1.1rem !important;
+  }
+
+  .card-icon {
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 1.2rem !important;
+    border-radius: 10px !important;
+  }
+
+  .card-description {
+    font-size: 0.8rem !important;
+    height: auto !important;
+    line-height: 1.4 !important;
+    margin-bottom: 0.8rem !important;
+  }
+
+  .tag-pill {
+    padding: 4px 9px !important;
+    font-size: 10px !important;
+  }
+
+  .rounds-selection-box {
+    padding: 1.2rem 0.8rem !important;
+    border-radius: 20px !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  .rounds-title {
+    font-size: 10px !important;
+    margin-bottom: 0.8rem !important;
+    letter-spacing: 1.5px !important;
+  }
+
+  .rounds-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 0.4rem !important;
+  }
+
+  .round-card {
+    padding: 0.35rem 0.3rem !important;
+    border-radius: 10px !important;
+    gap: 0.15rem !important;
+  }
+
+  .round-count {
+    font-size: 1rem !important;
+    line-height: 1.1 !important;
+  }
+
+  .round-time {
+    font-size: 8.5px !important;
+    line-height: 1.1 !important;
+  }
+
+  .btn-proceed {
+    padding: 8px 18px !important;
+    font-size: 0.78rem !important;
+    letter-spacing: 0.5px !important;
+    font-weight: 800 !important;
+    border-radius: 50px !important;
+    width: auto !important;
+    max-width: 235px !important;
+    margin: 0 auto !important;
+  }
 }

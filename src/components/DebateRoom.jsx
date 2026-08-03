@@ -19,7 +19,7 @@ function TypewriterMarkdown({ text, onComplete }) {
       } else {
         setDisplayedText(text.slice(0, index));
       }
-    }, 15);
+    }, 5);
     return () => window.clearInterval(intervalId);
   }, [text, onComplete]);
 
@@ -52,19 +52,37 @@ const DebateRoom = ({ onEndDebate }) => {
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
-  const { isListening, transcript, startListening, stopListening, setTranscript } = useSpeechToText();
+  const { isListening, transcript, error, startListening, stopListening, setTranscript } = useSpeechToText({
+    continuous: true,
+    lang: 'hi-IN' // RESTORED: Universal Native Devnagri + English ear!
+  });
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isAiTyping]);
 
-  // Handle Speech Finalization (Send when user stops speaking)
+  // Handle Hard Errors (e.g. permissions blocked)
   useEffect(() => {
-    if (isMicOn && !isListening && transcript.length > 5) {
-      void handleSendMessage(transcript);
+    if (error) {
+      console.error("Hard mic error detected:", error);
       setIsMicOn(false);
+      stopListening();
     }
-  }, [isListening, transcript]);
+  }, [error, stopListening, setIsMicOn]);
+
+  // SMART Auto-Send on 2.5s Silence (Much more stable than browser native!)
+  useEffect(() => {
+    if (!isMicOn || !transcript.trim() || transcript.length <= 5) return;
+
+    const silenceTimer = setTimeout(() => {
+      console.log("User finished speaking (2.5s silence). Auto-sending...");
+      void handleSendMessage(transcript);
+      stopListening();
+      setIsMicOn(false);
+    }, 2500); // 2.5 seconds of stable silence
+
+    return () => clearTimeout(silenceTimer);
+  }, [transcript, isMicOn, stopListening]);
 
   const isFor = position === "for";
   const userColorHex = isFor ? "#10b981" : "#ef4444";
@@ -112,6 +130,10 @@ const DebateRoom = ({ onEndDebate }) => {
     if (isMicOn) {
       stopListening();
       setIsMicOn(false);
+      // Fallback: If user manually stops, send whatever they spoke
+      if (transcript.trim().length > 5) {
+        void handleSendMessage(transcript);
+      }
     } else {
       setTranscript("");
       startListening();

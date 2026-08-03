@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 // Disable buffering so that database errors are thrown immediately
-mongoose.set('bufferCommands', false);
+// mongoose.set('bufferCommands', false);
 
 const connectDB = async () => {
   try {

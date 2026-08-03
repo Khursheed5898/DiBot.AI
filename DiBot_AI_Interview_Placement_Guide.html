@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DiBot.Ai - Technical Interview & Placement Master Guide</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 15mm;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 24px;
+            color: #0f172a;
+            line-height: 1.5;
+            background-color: #ffffff;
+        }
+        .header {
+            border-bottom: 3px solid #2563eb;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #0f172a;
+            font-size: 24px;
+            margin: 0 0 4px 0;
+        }
+        .subtitle {
+            color: #475569;
+            font-size: 13px;
+        }
+        .badge-container {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .badge {
+            background-color: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #334155;
+        }
+        .badge strong {
+            color: #2563eb;
+        }
+        .section-title {
+            color: #1e3a8a;
+            font-size: 17px;
+            border-bottom: 2px solid #cbd5e1;
+            padding-bottom: 6px;
+            margin-top: 24px;
+            margin-bottom: 14px;
+        }
+        .pitch-box {
+            background-color: #eff6ff;
+            border-left: 4px solid #2563eb;
+            padding: 14px 16px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-style: italic;
+            color: #1e40af;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            font-size: 12px;
+        }
+        th, td {
+            border: 1px solid #cbd5e1;
+            padding: 8px 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f8fafc;
+            color: #1e293b;
+            font-weight: 600;
+        }
+        .q-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid #059669;
+            border-radius: 6px;
+            padding: 14px;
+            margin-bottom: 14px;
+            page-break-inside: avoid;
+        }
+        .q-title {
+            font-weight: 700;
+            font-size: 14px;
+            color: #065f46;
+            margin-bottom: 6px;
+        }
+        .q-ans {
+            font-size: 13px;
+            color: #1e293b;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 12px;
+            border-top: 1px solid #e2e8f0;
+            text-align: center;
+            font-size: 11px;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>🎓 DiBot.Ai - Technical Interview & Placement Master Guide</h1>
+        <div class="subtitle">Comprehensive Project Architecture, DevOps Solutions & Top 10 Technical Q&As</div>
+        <div class="badge-container">
+            <div class="badge">Project: <strong>DiBot.Ai (AI Debate Partner)</strong></div>
+            <div class="badge">Stack: <strong>MERN + WebSockets + Gemini / Groq LLMs</strong></div>
+            <div class="badge">Cloud: <strong>AWS EC2 (Amazon Linux 2023)</strong></div>
+            <div class="badge">Live URL: <strong>http://54.234.184.111</strong></div>
+        </div>
+    </div>
+
+    <div class="section-title">1. Executive Summary & Project Pitch (30-Second Elevator Pitch)</div>
+    <div class="pitch-box">
+        "DiBot.Ai is a transparent AI debate partner engineered to sharpen critical thinking and structured reasoning for students. Unlike traditional chatbots that operate as black boxes, DiBot.Ai reveals its internal logical reasoning process in real time using WebSocket streaming, giving debaters live feedback on fallacies, counter-arguments, and persuasion metrics."
+    </div>
+
+    <div class="section-title">2. Technology Stack Breakdown</div>
+    <table>
+        <thead>
+            <tr>
+                <th>Layer</th>
+                <th>Technologies Used</th>
+                <th>Role & Purpose</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Frontend</strong></td>
+                <td>React 19, Vite 7, React Router DOM v7, Axios, Socket.io-client</td>
+                <td>Single Page Application (SPA) with real-time WebSocket state streaming and Mercury glassmorphic UI.</td>
+            </tr>
+            <tr>
+                <td><strong>Backend</strong></td>
+                <td>Node.js v20, Express.js, Socket.io, Mongoose v8, JWT, bcryptjs</td>
+                <td>REST API endpoints, WebSocket connection broker, authentication, and state management.</td>
+            </tr>
+            <tr>
+                <td><strong>AI Engine</strong></td>
+                <td>Google Generative AI (Gemini API) & Groq SDK (Llama 3.3 70B)</td>
+                <td>Low-latency LLM inference, logical argument evaluation, and streaming reasoning text.</td>
+            </tr>
+            <tr>
+                <td><strong>DevOps / Infrastructure</strong></td>
+                <td>AWS EC2 (Amazon Linux 2023 t3.micro), PM2, Nginx, Linux 2GB Swap</td>
+                <td>24/7 continuous cloud execution, reverse proxying, and memory-optimized node server host.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="section-title">3. Deployment & DevOps Challenges Solved</div>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Challenge</th>
+                <th>Root Cause</th>
+                <th>Engineering Solution</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td><strong>Out-Of-Memory (OOM)</strong></td>
+                <td>1 GB RAM instance ran out of memory during npm build.</td>
+                <td>Configured <strong>2 GB Linux Swap Space</strong> (<code>/swapfile</code>).</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td><strong>Node.js Version Conflict</strong></td>
+                <td>Amazon Linux default Node v18 incompatible with Vite 7.</td>
+                <td>Upgraded OS to <strong>Node.js 20 LTS</strong> (<code>v20.20.2</code>).</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td><strong>Infinite Postinstall Loop</strong></td>
+                <td>Circular <code>npm install --prefix server</code> script call.</td>
+                <td>Installed using <code>npm install --ignore-scripts</code> flag.</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td><strong>Nginx Default Proxy Issue</strong></td>
+                <td>Default Nginx config overrode custom reverse proxy.</td>
+                <td>Created <code>/etc/nginx/default.d/dibot.conf</code> using <code>sudo tee</code>.</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td><strong>MongoDB Atlas IP Block</strong></td>
+                <td>Cloud DB rejected connections from EC2 IP.</td>
+                <td>Whitelisted <code>0.0.0.0/0</code> in Atlas Network Access.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="section-title">4. Top Technical Interview Questions & Answers</div>
+
+    <div class="q-card">
+        <div class="q-title">Q1: Why WebSockets (Socket.io) instead of HTTP REST for AI Debates?</div>
+        <div class="q-ans">HTTP REST requires polling overhead. WebSockets provide full-duplex, bi-directional token streaming, allowing LLM responses to stream word-by-word into the UI with minimal latency.</div>
+    </div>
+
+    <div class="q-card">
+        <div class="q-title">Q2: What is the role of Nginx in front of Node.js?</div>
+        <div class="q-ans">Nginx acts as a Reverse Proxy listening on Port 80 and forwarding requests to Express on Port 5000. It handles WebSocket protocol upgrades (Upgrade/Connection headers) and abstracts internal ports.</div>
+    </div>
+
+    <div class="q-card">
+        <div class="q-title">Q3: Why use PM2 instead of running `node server.js` directly?</div>
+        <div class="q-ans">PM2 is an enterprise process manager providing zero-downtime auto-restarts on uncaught exceptions, system boot survival (`pm2 startup`), and real-time CPU/RAM telemetry (`pm2 monit`).</div>
+    </div>
+
+    <div class="q-card">
+        <div class="q-title">Q4: How did you optimize the app for a 1GB RAM AWS EC2 instance?</div>
+        <div class="q-ans">1) Offloaded heavy LLM compute to cloud APIs (Gemini/Groq). 2) Configured 2GB Swap Memory. 3) Built optimized React static production bundles served via Express.</div>
+    </div>
+
+    <div class="q-card">
+        <div class="q-title">Q5: How is Authentication handled in DiBot.Ai?</div>
+        <div class="q-ans">Stateless JWT authentication. Passwords are hashed with `bcryptjs`. Upon login, a signed JWT is stored in `localStorage` and sent in HTTP Authorization headers verified by Express middleware.</div>
+    </div>
+
+    <div class="q-card">
+        <div class="q-title">Q6: What is the difference between `npm install` and `npm ci`?</div>
+        <div class="q-ans">`npm install` resolves version ranges and mutates lockfiles. `npm ci` strictly installs exact versions from `package-lock.json`, making it 10x faster and deterministic for deployment.</div>
+    </div>
+
+    <div class="q-card">
+        <div class="q-title">Q7: How would you scale DiBot.Ai for 100,000 active debaters?</div>
+        <div class="q-ans">1) AWS Application Load Balancer (ALB) across EC2 instances. 2) Socket.io Redis Adapter for cross-server WebSocket state. 3) MongoDB Atlas database sharding and index optimization.</div>
+    </div>
+
+    <div class="footer">
+        Generated for DiBot.Ai | Technical Interview & Placement Master Guide
+    </div>
+
+</body>
+</html>

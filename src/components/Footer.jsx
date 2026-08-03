@@ -88,8 +88,7 @@ function Footer() {
 
         <div className="footer-bottom">
           <p>
-            &copy; 2026 DiBot.AI : All rights reserved | Powered by - DiBot.AI
-            ✨
+            &copy; 2026 <span className="brand-accent">DiBot.AI</span>. All rights reserved. <span className="separator">•</span> Powered by <span className="brand-sparkle">DiBot.AI ✨</span>
           </p>
         </div>
       </div>

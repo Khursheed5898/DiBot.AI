@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DiBot.Ai - Production AWS EC2 Deployment & Maintenance Guide</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 15mm;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 24px;
+            color: #0f172a;
+            line-height: 1.5;
+            background-color: #ffffff;
+        }
+        .header {
+            border-bottom: 3px solid #2563eb;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #0f172a;
+            font-size: 24px;
+            margin: 0 0 4px 0;
+        }
+        .subtitle {
+            color: #475569;
+            font-size: 13px;
+        }
+        .badge-container {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .badge {
+            background-color: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #334155;
+        }
+        .badge strong {
+            color: #2563eb;
+        }
+        .section-title {
+            color: #1e3a8a;
+            font-size: 18px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 6px;
+            margin-top: 24px;
+            margin-bottom: 14px;
+        }
+        .step-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid #2563eb;
+            border-radius: 6px;
+            padding: 14px;
+            margin-bottom: 14px;
+            page-break-inside: avoid;
+        }
+        .update-card {
+            border-left-color: #10b981;
+        }
+        h2 {
+            color: #1e293b;
+            font-size: 15px;
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+        p {
+            margin: 0 0 8px 0;
+            font-size: 13px;
+        }
+        pre {
+            background-color: #0f172a;
+            color: #38bdf8;
+            padding: 12px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 12px;
+            margin: 0;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .note {
+            background-color: #fffbeb;
+            border: 1px solid #fef08a;
+            border-left: 4px solid #eab308;
+            padding: 8px 12px;
+            margin-top: 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #713f12;
+        }
+        .footer {
+            margin-top: 24px;
+            padding-top: 12px;
+            border-top: 1px solid #e2e8f0;
+            text-align: center;
+            font-size: 11px;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>🚀 DiBot.Ai - Production AWS EC2 Deployment & Maintenance Guide</h1>
+        <div class="subtitle">Complete Master Guide for Amazon Linux 2023 | Initial Setup + Future Updates</div>
+        <div class="badge-container">
+            <div class="badge">OS: <strong>Amazon Linux 2023</strong></div>
+            <div class="badge">Instance: <strong>t3.micro (2 vCPU, 1GB RAM + 2GB Swap)</strong></div>
+            <div class="badge">Node.js: <strong>v20.20.2 LTS</strong></div>
+            <div class="badge">Public IP: <strong>54.234.184.111</strong></div>
+            <div class="badge">User: <strong>ec2-user</strong></div>
+        </div>
+    </div>
+
+    <div class="section-title">📌 PART 1: Initial Deployment Steps (Tested & Verified)</div>
+
+    <div class="step-card">
+        <h2>Step 1: Install Node.js 20 LTS & Core Tools</h2>
+        <p>Upgrades Node.js to v20 LTS to satisfy dependencies for React Router 7 and Vite 7.</p>
+        <pre><code>sudo dnf remove -y nodejs
+curl -fsSL https://rpm.nodesource.com/setup_20.x | sudo bash -
+sudo dnf install -y nodejs git nginx
+node -v</code></pre>
+    </div>
+
+    <div class="step-card">
+        <h2>Step 2: Configure 2GB Swap Memory</h2>
+        <p>Prevents memory crashes during npm install & Vite build processes on 1GB RAM instances.</p>
+        <pre><code>sudo fallocate -l 2G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab</code></pre>
+    </div>
+
+    <div class="step-card">
+        <h2>Step 3: Clone Repository & Create Production .env File</h2>
+        <pre><code>git clone https://github.com/Khursheed5898/DiBot.AI.git
+cd DiBot.AI
+nano .env</code></pre>
+        <p style="margin-top: 6px;">Paste environment variables inside <code>nano .env</code>:</p>
+        <pre><code>PORT=5000
+NODE_ENV=production
+CLIENT_URL=http://54.234.184.111
+MONGODB_URI=mongodb+srv://khursheed5898:MyCluster747@cluster01.zfgllj2.mongodb.net/dibotai?retryWrites=true&w=majority
+GEMINI_API_KEY=AIzaSyA5puiNWJkLVPCmbaW23w5wLR9lsnQUioo
+GROQ_API_KEY=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
+GROQ_MODEL=llama-3.3-70b-versatile
+JWT_SECRET=dibot_secret_key_12345</code></pre>
+        <div class="note">Save in nano: Press <strong>Ctrl + O</strong> &rarr; <strong>Enter</strong> &rarr; <strong>Ctrl + X</strong></div>
+    </div>
+
+    <div class="step-card">
+        <h2>Step 4: Install Dependencies & Build Frontend</h2>
+        <p>Uses <code>--ignore-scripts</code> flag to bypass postinstall recursion and complete build cleanly.</p>
+        <pre><code>npm install --ignore-scripts
+cd server && npm install --ignore-scripts && cd ..
+npm run build</code></pre>
+    </div>
+
+    <div class="step-card">
+        <h2>Step 5: Configure PM2 Process Manager (24/7 Execution)</h2>
+        <pre><code>sudo npm install -g pm2
+pm2 start server/server.js --name "dibot"
+pm2 startup
+pm2 save</code></pre>
+    </div>
+
+    <div class="step-card">
+        <h2>Step 6: Configure Nginx Reverse Proxy (Port 80 &rarr; Port 5000)</h2>
+        <pre><code>sudo tee /etc/nginx/default.d/dibot.conf > /dev/null << 'EOF'
+location / {
+    proxy_pass http://localhost:5000;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection 'upgrade';
+    proxy_set_header Host $host;
+    proxy_cache_bypass $http_upgrade;
+}
+EOF
+
+sudo systemctl enable nginx
+sudo systemctl restart nginx</code></pre>
+    </div>
+
+    <div class="step-card">
+        <h2>Step 7: Whitelist EC2 IP in MongoDB Atlas</h2>
+        <p>Go to <strong>cloud.mongodb.com</strong> &rarr; <strong>Security</strong> &rarr; <strong>Network Access</strong> &rarr; Add <code>0.0.0.0/0</code> &rarr; Click <strong>Confirm</strong>.</p>
+        <pre><code>pm2 restart dibot</code></pre>
+    </div>
+
+    <div class="section-title">🔄 PART 2: Future Maintenance & Code Updates Guide</div>
+
+    <div class="step-card update-card">
+        <h2>1. How to Deploy New Code Updates (Future Changes)</h2>
+        <p>Whenever you update code locally and push to GitHub, run these 3 commands on EC2:</p>
+        <pre><code>cd DiBot.AI
+git pull origin main
+npm run build
+pm2 restart dibot</code></pre>
+    </div>
+
+    <div class="step-card update-card">
+        <h2>2. Server Monitoring & Logs</h2>
+        <pre><code># View live logs
+pm2 logs dibot
+
+# View last 50 lines of logs
+pm2 logs dibot --lines 50
+
+# Check process CPU & memory status
+pm2 status
+
+# Check system RAM & Swap
+free -h</code></pre>
+    </div>
+
+    <div class="step-card update-card">
+        <h2>3. Emergency Troubleshooting Commands</h2>
+        <pre><code># Restart Application
+pm2 restart dibot
+
+# Restart Web Server
+sudo systemctl restart nginx
+
+# If app hangs or processes freeze
+sudo killall node npm
+pm2 restart dibot</code></pre>
+    </div>
+
+    <div class="step-card update-card">
+        <h2>4. Adding Custom Domain & Free SSL (HTTPS)</h2>
+        <p>Point your domain's <strong>A Record</strong> to <code>54.234.184.111</code>, then run:</p>
+        <pre><code>sudo dnf install -y certbot python3-certbot-nginx
+sudo certbot --nginx</code></pre>
+    </div>
+
+    <div class="footer">
+        Generated for DiBot.Ai | Production AWS EC2 Master Guide
+    </div>
+
+</body>
+</html>

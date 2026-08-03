@@ -46,12 +46,13 @@ async function runTests() {
   }
 
   // 3. Test Groq AI
-  console.log(`\n${colors.cyan}[3/4] Testing Groq AI Integration...${colors.reset}`);
+  const testModel = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
+  console.log(`\n${colors.cyan}[3/4] Testing Groq AI Integration (${testModel})...${colors.reset}`);
   try {
     const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
     const completion = await groq.chat.completions.create({
       messages: [{ role: "user", content: "Say 'Groq Online'" }],
-      model: "llama-3.3-70b-versatile",
+      model: testModel,
     });
     const text = completion.choices[0]?.message?.content || "";
     console.log(`   ${colors.green}✓${colors.reset} Groq API Response: ${colors.yellow}"${text.trim()}"${colors.reset}`);

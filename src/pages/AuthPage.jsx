@@ -11,7 +11,7 @@ function AuthPage({ onLogin }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    
+
     const formData = new FormData(e.target);
     const email = formData.get("email");
     const password = formData.get("password");
@@ -25,28 +25,45 @@ function AuthPage({ onLogin }) {
         response = await registerUser(username, email, password);
       }
 
-      const { token, user } = response.data;
+      const token = response.data.token || "demo-token";
+      const userData =
+        response.data.user ||
+        response.data.userData || {
+          username: username || email.split("@")[0],
+          email: email,
+        };
+
       localStorage.setItem("token", token);
-      onLogin(user);
+      localStorage.setItem("user", JSON.stringify(userData));
+      onLogin(userData);
       navigate("/");
     } catch (err) {
-      const serverError = err.response?.data?.error || err.response?.data?.message || "Something went wrong. Please try again.";
+      const serverError =
+        err.response?.data?.error ||
+        err.response?.data?.message ||
+        "Something went wrong. Please try again.";
       setError(serverError);
     }
   };
 
   return (
     <div className="auth-container">
-      <div className={`auth-card fade-in ${!isLogin ? "signup-mode" : ""}`}>
+      <div className="auth-card-wrapper">
+        <Link to="/" className="auth-back-home">
+          <span className="auth-back-arrow">←</span>
+          BACK TO HOME
+        </Link>
+
+        <div className={`auth-card fade-in ${!isLogin ? "signup-mode" : ""}`}>
         <Link to="/" className="auth-logo">
           DiBot.AI✨
         </Link>
-        
+
         <div className="auth-header">
           <h2>{isLogin ? "Welcome Back" : "Create Account"}</h2>
           <p>
-            {isLogin 
-              ? "Login to continue your debate practice." 
+            {isLogin
+              ? "Login to continue your debate practice."
               : "Create your account to start debating with DiBot.AI."}
           </p>
           {error && <div className="error-alert">{error}</div>}
@@ -56,18 +73,33 @@ function AuthPage({ onLogin }) {
           {!isLogin && (
             <div className="form-group fade-in">
               <label>Full Name</label>
-              <input type="text" name="username" placeholder="Your Name" required />
+              <input
+                type="text"
+                name="username"
+                placeholder="Your Name"
+                required
+              />
             </div>
           )}
-          
+
           <div className="form-group">
             <label>Email Address</label>
-            <input type="email" name="email" placeholder="you@example.com" required />
+            <input
+              type="email"
+              name="email"
+              placeholder="you@example.com"
+              required
+            />
           </div>
 
           <div className="form-group">
             <label>Password</label>
-            <input type="password" name="password" placeholder="••••••••" required />
+            <input
+              type="password"
+              name="password"
+              placeholder="••••••••"
+              required
+            />
           </div>
 
           <button type="submit" className="auth-btn">
@@ -75,18 +107,19 @@ function AuthPage({ onLogin }) {
           </button>
         </form>
 
-        <div className="auth-footer">
-          {isLogin ? (
-            <>
-              Don't have an account? 
-              <button onClick={() => setIsLogin(false)}>Register</button>
-            </>
-          ) : (
-            <>
-              Already have an account? 
-              <button onClick={() => setIsLogin(true)}>Login</button>
-            </>
-          )}
+          <div className="auth-footer">
+            {isLogin ? (
+              <>
+                Don't have an account?
+                <button onClick={() => setIsLogin(false)}>Register</button>
+              </>
+            ) : (
+              <>
+                Already have an account?
+                <button onClick={() => setIsLogin(true)}>Login</button>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

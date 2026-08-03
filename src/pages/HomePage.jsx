@@ -180,9 +180,7 @@ function HomePage({ user, onLogout, onStartDebate }) {
                 {/* First Set */}
                 <article className="testimonial-card">
                   <div className="testimonial-content">
-                    "The logic visualization helps our junior devs understand AI
-                    reasoning better than any other tool. It's like having a senior
-                    architect auditing in real-time."
+                    "The logic visualization helps our junior devs understand AI reasoning better than any other tool."
                   </div>
                   <div className="testimonial-author">
                     <div className="author-avatar teal-glow">
@@ -197,9 +195,7 @@ function HomePage({ user, onLogout, onStartDebate }) {
 
                 <article className="testimonial-card">
                   <div className="testimonial-content">
-                    "Identifying subtle biases in sources is now a 5-minute task.
-                    DiBot is part of my daily research. The transparency it offers is
-                    unmatched in the industry."
+                    "Identifying subtle biases in sources is now a 5-minute task. DiBot is part of my daily research."
                   </div>
                   <div className="testimonial-author">
                     <div className="author-avatar red-glow">
@@ -214,9 +210,7 @@ function HomePage({ user, onLogout, onStartDebate }) {
 
                 <article className="testimonial-card">
                   <div className="testimonial-content">
-                    "DiBot.AI helped me understand my own reasoning patterns.
-                    The transparency feature is incredible! I've become much more
-                    confident in structuring arguments for my classes."
+                    "DiBot.AI helped me understand my own reasoning patterns and structure arguments confidently."
                   </div>
                   <div className="testimonial-author">
                     <div className="author-avatar purple-glow">
@@ -231,9 +225,7 @@ function HomePage({ user, onLogout, onStartDebate }) {
 
                 <article className="testimonial-card">
                   <div className="testimonial-content">
-                    "Finally, an AI tool that teaches rather than just responds.
-                    The transparency engine is brilliant. It shows the process,
-                    not just the final answer."
+                    "Finally, an AI tool that teaches rather than just responds. The transparency engine is brilliant."
                   </div>
                   <div className="testimonial-author">
                     <div className="author-avatar blue-glow">
@@ -249,9 +241,7 @@ function HomePage({ user, onLogout, onStartDebate }) {
                 {/* Second Set for seamless loop */}
                 <article className="testimonial-card">
                   <div className="testimonial-content">
-                    "The logic visualization helps our junior devs understand AI
-                    reasoning better than any other tool. It's like having a senior
-                    architect auditing in real-time."
+                    "The logic visualization helps our junior devs understand AI reasoning better than any other tool."
                   </div>
                   <div className="testimonial-author">
                     <div className="author-avatar teal-glow">
@@ -266,9 +256,7 @@ function HomePage({ user, onLogout, onStartDebate }) {
 
                 <article className="testimonial-card">
                   <div className="testimonial-content">
-                    "Identifying subtle biases in sources is now a 5-minute task.
-                    DiBot is part of my daily research. The transparency it offers is
-                    unmatched in the industry."
+                    "Identifying subtle biases in sources is now a 5-minute task. DiBot is part of my daily research."
                   </div>
                   <div className="testimonial-author">
                     <div className="author-avatar red-glow">
@@ -283,9 +271,7 @@ function HomePage({ user, onLogout, onStartDebate }) {
 
                 <article className="testimonial-card">
                   <div className="testimonial-content">
-                    "DiBot.AI helped me understand my own reasoning patterns.
-                    The transparency feature is incredible! I've become much more
-                    confident in structuring arguments for my classes."
+                    "DiBot.AI helped me understand my own reasoning patterns and structure arguments confidently."
                   </div>
                   <div className="testimonial-author">
                     <div className="author-avatar purple-glow">
@@ -300,9 +286,7 @@ function HomePage({ user, onLogout, onStartDebate }) {
 
                 <article className="testimonial-card">
                   <div className="testimonial-content">
-                    "Finally, an AI tool that teaches rather than just responds.
-                    The transparency engine is brilliant. It shows the process,
-                    not just the final answer."
+                    "Finally, an AI tool that teaches rather than just responds. The transparency engine is brilliant."
                   </div>
                   <div className="testimonial-author">
                     <div className="author-avatar blue-glow">

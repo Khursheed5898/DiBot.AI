@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATS-Friendly Professional Resume</title>
+    <style>
+        :root {
+            --primary-color: #111827;
+            --secondary-color: #374151;
+            --text-color: #333333;
+            --accent-color: #1d4ed8;
+            --border-color: #d1d5db;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Calibri", "Arial", sans-serif;
+            line-height: 1.4;
+            color: var(--text-color);
+            background-color: #f3f4f6;
+            padding: 20px;
+            font-size: 11pt; /* Optimal print font size */
+        }
+
+        .resume-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px 50px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border-radius: 4px;
+        }
+
+        /* Header Styling */
+        header {
+            text-align: center;
+            margin-bottom: 18px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 8px;
+        }
+
+        header h1 {
+            font-size: 24pt;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary-color);
+            margin-bottom: 4px;
+            font-weight: bold;
+        }
+
+        .contact-info {
+            font-size: 10pt;
+            color: var(--secondary-color);
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .contact-info span {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .contact-info a {
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+
+        .divider {
+            color: var(--border-color);
+        }
+
+        /* Section Styling */
+        section {
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 13pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: var(--primary-color);
+            border-bottom: 1.5px solid var(--secondary-color);
+            padding-bottom: 2px;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Content Details */
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            margin-bottom: 2px;
+            color: var(--primary-color);
+        }
+
+        .item-subheader {
+            display: flex;
+            justify-content: space-between;
+            font-style: italic;
+            margin-bottom: 5px;
+            font-size: 10.5pt;
+            color: var(--secondary-color);
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-bottom: 10px;
+            list-style-type: disc;
+        }
+
+        li {
+            margin-bottom: 4px;
+            text-align: justify;
+        }
+
+        /* Skills Section */
+        .skills-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .skills-category {
+            font-size: 10.5pt;
+        }
+
+        .skills-category strong {
+            color: var(--primary-color);
+        }
+
+        /* Utility and Print Settings */
+        .highlight {
+            font-weight: 600;
+        }
+
+        /* Top Action Bar */
+        .action-bar {
+            max-width: 800px;
+            margin: 0 auto 15px auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1e293b;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+        }
+
+        .btn-print {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .btn-print:hover {
+            background: #2563eb;
+        }
+
+        /* Print View Optimizations */
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+                margin: 0;
+            }
+
+            .resume-container {
+                box-shadow: none;
+                padding: 0;
+                margin: 0;
+                max-width: 100%;
+                border-radius: 0;
+            }
+
+            .action-bar {
+                display: none;
+            }
+            
+            a {
+                text-decoration: none !important;
+                color: black !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="action-bar">
+        <div>
+            <strong>ATS Resume Builder</strong> | Perfect 90+ ATS Format
+        </div>
+        <button class="btn-print" onclick="window.print()">Print / Save to PDF</button>
+    </div>
+
+    <div class="resume-container">
+        <!-- Header -->
+        <header>
+            <h1>[YOUR FULL NAME]</h1>
+            <div class="contact-info">
+                <span>📍 [Your City, Country]</span>
+                <span class="divider">|</span>
+                <span>📞 [+91 XXXXXXXXXX]</span>
+                <span class="divider">|</span>
+                <span>✉️ <a href="mailto:yourname@email.com">yourname@email.com</a></span>
+                <span class="divider">|</span>
+                <span>🔗 <a href="https://linkedin.com/in/yourprofile" target="_blank">linkedin.com/in/yourprofile</a></span>
+                <span class="divider">|</span>
+                <span>💻 <a href="https://github.com/Khursheed5898" target="_blank">github.com/Khursheed5898</a></span>
+            </div>
+        </header>
+
+        <!-- Professional Summary -->
+        <section>
+            <div class="section-title">Professional Summary</div>
+            <p style="text-align: justify;">
+                Highly motivated and analytical Software Engineering undergraduate (B.Tech CS) with a deep interest in full-stack architecture and Generative AI integrations. Hands-on experience building transparent reasoning engines, conversational agents, and data visualization suites using Node.js, React 19, and Google Gemini API. Demonstrates strong competencies in algorithmic reasoning, asynchronous API design, and real-time state synchronizations (WebSockets). Enthusiastic to contribute robust technical execution in agile environments.
+            </p>
+        </section>
+
+        <!-- Education -->
+        <section>
+            <div class="section-title">Education</div>
+            <div class="item-header">
+                <span>[YOUR UNIVERSITY/COLLEGE NAME]</span>
+                <span>[Expected May 2026]</span>
+            </div>
+            <div class="item-subheader">
+                <span>Bachelor of Technology (B.Tech) in Computer Science & Engineering</span>
+                <span>CGPA: [X.XX] / 10.00</span>
+            </div>
+        </section>
+
+        <!-- Technical Skills -->
+        <section>
+            <div class="section-title">Technical Skills</div>
+            <div class="skills-grid">
+                <div class="skills-category">
+                    <strong>Languages:</strong> JavaScript (ES6+), Python, HTML5, CSS3, C/C++, SQL
+                </div>
+                <div class="skills-category">
+                    <strong>Frontend Frameworks & Libraries:</strong> React.js (18/19), React Router DOM, Vite, Redux Toolkit, Next.js (Basics)
+                </div>
+                <div class="skills-category">
+                    <strong>Backend & Real-time:</strong> Node.js, Express.js, RESTful APIs, Socket.io (WebSockets), Web Speech API, JWT Auth
+                </div>
+                <div class="skills-category">
+                    <strong>Databases:</strong> MongoDB (Mongoose ODM), MySQL
+                </div>
+                <div class="skills-category">
+                    <strong>AI / ML:</strong> Generative AI (Google Gemini API), Vector Embeddings, Prompt Engineering, Scikit-Learn
+                </div>
+                <div class="skills-category">
+                    <strong>Developer Tools:</strong> Git, GitHub, VS Code, Render, Postman, NPM
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects -->
+        <section>
+            <div class="section-title">Technical Projects</div>
+
+            <!-- DiBot.AI -->
+            <div style="margin-bottom: 12px;">
+                <div class="item-header">
+                    <span>DiBot.Ai – Transparent AI Debate Partner</span>
+                    <span>April 2026 – Present</span>
+                </div>
+                <div class="item-subheader">
+                    <span>React 19, Node.js, Socket.io, MongoDB, Google Gemini API</span>
+                    <span><a href="https://github.com/Khursheed5898/DiBot.AI" target="_blank">github.com/Khursheed5898/DiBot.AI</a></span>
+                </div>
+                <ul>
+                    <li>Architected a real-time, full-stack educational debate simulator leveraging a scalable <strong>React 19 / Vite</strong> client and <strong>Node.js/Express</strong> API gateway.</li>
+                    <li>Integrated <strong>Google Generative AI (Gemini API)</strong> with engineered system prompt contracts to expose the AI’s "internal logical path", boosting reasoning transparency for critical thinking practice.</li>
+                    <li>Orchestrated real-time bidirectional socket streams via <strong>Socket.io</strong>, reducing broadcast Latency to under 150ms for real-time stance analysis and response generation cycles.</li>
+                    <li>Implemented native browser **Speech-to-Text (Web Speech API)** integrations, constructing a low-friction voice debate pipeline parsing verbal user input directly into textual payloads.</li>
+                    <li>Designed complex Mongoose ODM analytics schemas storing granular speech telemetry (filler words, pacing, argument strength) resulting in a fast feedback dashboard.</li>
+                    <li>Engineered secured session layers featuring <strong>JWT authentication</strong> and stateless server-side route guards protecting real-time debate rooms.</li>
+                </ul>
+            </div>
+
+            <!-- Project 2 -->
+            <div>
+                <div class="item-header">
+                    <span>AI-Powered Movie Recommendation System</span>
+                    <span>Jan 2026 – March 2026</span>
+                </div>
+                <div class="item-subheader">
+                    <span>Python, Streamlit, Scikit-Learn, Pandas</span>
+                    <span>[Link to Project/GitHub]</span>
+                </div>
+                <ul>
+                    <li>Developed an end-to-end content-based filtering recommendation dashboard utilizing <strong>Python</strong> and <strong>Streamlit</strong>.</li>
+                    <li>Formulated vector space matrices by tokenizing text attributes through **TF-IDF Vectorization**, performing fast cosine similarity checks to locate top-K recommendations.</li>
+                    <li>Preprocessed large-scale structured moviesets with **Pandas** and **NumPy**, standardizing inconsistent metadata and improving recommendations precision by 20%.</li>
+                    <li>Deployed model workflows onto a responsive, low-maintenance Streamlit cloud interface, obtaining execution times of under 75ms for 5,000+ items.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Certifications & Competitions -->
+        <section>
+            <div class="section-title">Certifications & Extracurriculars</div>
+            <ul>
+                <li><strong>Problem Solving:</strong> Solved [XXX]+ Data Structures & Algorithms (DSA) challenges across standard platforms.</li>
+                <li><strong>Technical Collaboration:</strong> Experienced with Agile practices, Git workflows, and full CI/CD deployment lifecycles on Cloud hosting systems (Render).</li>
+                <li>[Optional: Add any Web Dev/AI Certification e.g., Meta Front-End Developer or freeCodeCamp]</li>
+            </ul>
+        </section>
+    </div>
+
+</body>
+</html>

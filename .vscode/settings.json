@@ -1,3 +1,6 @@
 {
-  "editor.fontSize": 16
+  "editor.fontSize": 18,
+  "python.defaultInterpreterPath": "C:\\Users\\khurs\\AppData\\Local\\Python\\bin\\python.exe",
+  "files.autoSave": "afterDelay",
+  "terminal.integrated.fontSize": 18
 }

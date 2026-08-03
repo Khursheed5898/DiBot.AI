@@ -144,7 +144,7 @@ function DifficultyPage({ user, onLogout, onStartDebate }) {
 
         <div className="difficulty-actions">
            <button className={`btn-proceed ${difficulty}`} onClick={startDebate}>
-             ENTER DEBATE ROOM →
+             ENTER DEBATE ROOM <i className="fas fa-arrow-right" style={{ marginLeft: "6px", fontWeight: "900" }} />
            </button>
         </div>
       </main>

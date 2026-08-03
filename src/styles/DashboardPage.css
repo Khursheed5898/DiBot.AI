@@ -4,6 +4,8 @@
   color: #ffffff;
   padding: 2rem 5%;
   font-family: 'Outfit', sans-serif;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 /* Header */
@@ -12,27 +14,61 @@
   animation: fadeInDown 0.8s ease-out;
 }
 
+@keyframes glass-fluid {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes arrow-nudge {
+  0%, 100% { transform: translateX(0); }
+  40%       { transform: translateX(-5px); }
+  70%       { transform: translateX(-2px); }
+}
+
 .btn-back {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  color: #94a3b8;
+  gap: 8px;
+  color: #cbd5e1;
   text-decoration: none;
   font-weight: 700;
   font-size: 13px;
   letter-spacing: 2px;
-  padding: 0.5rem 1.2rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 0.45rem 0.9rem;
+  background: linear-gradient(
+    270deg,
+    rgba(59, 130, 246, 0.15),
+    rgba(255, 255, 255, 0.06),
+    rgba(99, 102, 241, 0.12),
+    rgba(255, 255, 255, 0.04)
+  );
+  background-size: 400% 400%;
+  animation: glass-fluid 6s ease infinite;
+  border: 1px solid rgba(255, 255, 255, 0.10);
   border-radius: 12px;
-  transition: all 0.3s ease;
+  transition: color 0.3s ease, border-color 0.3s ease;
   margin-bottom: 1rem;
+  backdrop-filter: blur(8px);
+}
+
+.btn-back .arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 14px;
+  line-height: 1;
+  vertical-align: middle;
+  margin-top: -1px;
+  color: #ffffff;
+  animation: arrow-nudge 2s ease-in-out infinite;
+  will-change: transform;
 }
 
 .btn-back:hover {
-  background: rgba(255, 255, 255, 0.08);
   color: #ffffff;
-  transform: translateX(-5px);
+  border-color: rgba(255, 255, 255, 0.22);
 }
 
 .header-main {
@@ -104,10 +140,12 @@
 /* Stats Grid */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 0.65fr 0.95fr 1.2fr 1.2fr;
   gap: 1.5rem;
   margin-bottom: 3rem;
   animation: fadeInUp 0.8s ease-out 0.2s both;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .stat-card {
@@ -122,6 +160,9 @@
   gap: 10px;
   transition: transform 0.3s ease, border-color 0.3s ease;
   text-align: center;
+  min-width: 0;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .stat-card:hover {
@@ -137,8 +178,10 @@
 }
 
 .stat-value {
-  font-size: 42px;
+  font-size: clamp(14px, 2.8vw, 42px);
   font-weight: 900;
+  word-break: break-all;
+  line-height: 1.1;
 }
 
 /* Analytics Section */
@@ -330,4 +373,301 @@
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 1023px) {
+  .dashboard-container {
+    padding: 0.8rem 4% !important;
+    min-height: 100vh !important;
+  }
+
+  /* ── Header ── */
+  .dashboard-header {
+    margin-bottom: 1rem !important;
+  }
+
+  .btn-back {
+    font-size: 11px !important;
+    padding: 0.35rem 0.8rem !important;
+    letter-spacing: 1.5px !important;
+    margin-bottom: 0.7rem !important;
+    border-radius: 10px !important;
+  }
+
+  .header-main {
+    flex-direction: row !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    gap: 0.5rem !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .header-text {
+    flex: 1 !important;
+    min-width: 0 !important;
+  }
+
+  .dashboard-title {
+    font-size: 20px !important;
+    letter-spacing: -0.5px !important;
+    margin: 0 !important;
+  }
+
+  .welcome-msg {
+    font-size: 11px !important;
+    margin-top: 0.3rem !important;
+    line-height: 1.4 !important;
+  }
+
+  .xp-card {
+    margin-left: 0.8rem !important;
+    margin-bottom: 0 !important;
+    padding: 0.5rem 0.8rem !important;
+    border-radius: 12px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .xp-label {
+    font-size: 8px !important;
+    letter-spacing: 1.5px !important;
+  }
+
+  .xp-value {
+    font-size: 18px !important;
+  }
+
+  /* ── Stats Grid — 2 cols ── */
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.6rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .stat-card {
+    padding: 0.8rem 0.6rem !important;
+    border-radius: 14px !important;
+    gap: 6px !important;
+  }
+
+  .stat-label {
+    font-size: 9px !important;
+    letter-spacing: 1px !important;
+  }
+
+  .stat-value {
+    font-size: 22px !important;
+  }
+
+  /* ── Analytics Section — grouped side-by-side on 768px up to 2560px+ ── */
+  @media (min-width: 768px) {
+    .analytics-section {
+      display: grid !important;
+      grid-template-columns: 1.2fr 0.8fr !important;
+      gap: 1.2rem !important;
+      margin-bottom: 1.5rem !important;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .analytics-section {
+      display: grid !important;
+      grid-template-columns: 1fr !important;
+      gap: 0.8rem !important;
+      margin-bottom: 1rem !important;
+    }
+  }
+
+  .chart-card {
+    padding: 1rem 0.8rem !important;
+    border-radius: 16px !important;
+  }
+
+  .chart-title {
+    font-size: 13px !important;
+    margin-bottom: 0.8rem !important;
+  }
+
+  .svg-chart {
+    height: 130px !important;
+  }
+
+  .chart-labels {
+    font-size: 9px !important;
+    margin-top: 0.5rem !important;
+  }
+
+  .donut-mock {
+    width: 110px !important;
+    height: 110px !important;
+  }
+
+  .donut-legend {
+    gap: 0.6rem 2rem !important;
+    margin-top: 0.6rem !important;
+  }
+
+  .legend-item {
+    font-size: 9px !important;
+    gap: 6px !important;
+  }
+
+  .dot {
+    width: 6px !important;
+    height: 6px !important;
+  }
+
+  /* ── History Section ── */
+  .history-section {
+    margin-bottom: 1.5rem !important;
+  }
+
+  .section-title {
+    font-size: 16px !important;
+    margin-bottom: 0.8rem !important;
+  }
+
+  .history-table-container {
+    padding: 0.4rem !important;
+    border-radius: 14px !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .history-table th {
+    padding: 0.6rem 0.5rem !important;
+    font-size: 9px !important;
+    letter-spacing: 0.5px !important;
+    white-space: nowrap !important;
+  }
+
+  .history-row td {
+    padding: 0.6rem 0.5rem !important;
+    font-size: 11px !important;
+    white-space: nowrap !important;
+  }
+
+  .topic-name {
+    max-width: 120px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  .score {
+    gap: 6px !important;
+  }
+
+  .score-bar-bg {
+    width: 50px !important;
+    height: 4px !important;
+  }
+
+  .result {
+    font-size: 9px !important;
+    letter-spacing: 0.5px !important;
+  }
+
+  .btn-view {
+    padding: 0.3rem 0.6rem !important;
+    font-size: 10px !important;
+    border-radius: 8px !important;
+  }
+}
+
+/* ── Desktop Fix (1024px, 1440px up to 2560px 4K) ── */
+@media (min-width: 1024px) {
+  .dashboard-container {
+    padding: 1.8rem 5% !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 1400px !important;
+    margin: 0 auto !important;
+  }
+
+  /* Stats grid — Group of 2 cards per row */
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1rem !important;
+    margin-bottom: 1.8rem !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .stat-card {
+    padding: 1.2rem 1.5rem !important;
+    border-radius: 16px !important;
+    box-sizing: border-box !important;
+    gap: 8px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .stat-value {
+    font-size: 24px !important;
+    font-weight: 800 !important;
+    line-height: 1.2 !important;
+    text-align: center !important;
+  }
+
+  .stat-label {
+    font-size: 11px !important;
+    letter-spacing: 1px !important;
+    text-align: center !important;
+  }
+
+  /* Header */
+  .header-main {
+    flex-direction: row !important;
+    align-items: flex-start !important;
+    flex-wrap: nowrap !important;
+    gap: 1rem !important;
+  }
+
+  .header-text {
+    flex: 1 !important;
+    min-width: 0 !important;
+  }
+
+  .dashboard-title {
+    font-size: 28px !important;
+  }
+
+  .welcome-msg {
+    font-size: 14px !important;
+  }
+
+  .xp-card {
+    flex-shrink: 0 !important;
+    padding: 0.7rem 1.2rem !important;
+    margin-left: 1rem !important;
+  }
+
+  .xp-value {
+    font-size: 22px !important;
+  }
+
+  /* Analytics — Group of 2 side-by-side cards */
+  .analytics-section {
+    display: grid !important;
+    grid-template-columns: 1.1fr 0.9fr !important;
+    gap: 1.5rem !important;
+    margin-bottom: 2rem !important;
+  }
+}
+
+  /* History */
+  .history-table-container {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .topic-name {
+    max-width: 180px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
 }

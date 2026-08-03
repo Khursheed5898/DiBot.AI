@@ -107,7 +107,10 @@ function DebateModal({ onClose, onSelect }) {
           </div>
         ) : (
           <div className="position-selection-view fade-in">
-             <div className="modal-logo-area">
+            <button className="debate-modal-back-top" onClick={() => setStep(1)}>
+              Back
+            </button>
+            <div className="modal-logo-area">
               <span className="modal-dibot-logo">DiBot.AI✨</span>
             </div>
             <h2 className="selected-topic-display">"{selectedTopic}"</h2>
@@ -131,10 +134,6 @@ function DebateModal({ onClose, onSelect }) {
                 <span className="pos-subtext">Challenge this claim</span>
               </button>
             </div>
-            
-            <button className="back-link" onClick={() => setStep(1)}>
-              ← Back to topic selection
-            </button>
           </div>
         )}
       </div>

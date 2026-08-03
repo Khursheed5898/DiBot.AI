@@ -46,6 +46,7 @@ export async function sendMessageToAI({
   round,
   totalRounds,
   history,
+  replyLang, // New UI-forced language state
 }) {
   try {
     const response = await api.post("/debate/message", {
@@ -56,6 +57,7 @@ export async function sendMessageToAI({
       round,
       totalRounds,
       history,
+      replyLang,
     });
 
     return response.data.reply;

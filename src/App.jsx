@@ -29,7 +29,7 @@ function App() {
 
   const handleLogout = () => {
     setIsLoggingOut(true);
-    
+
     // Smooth exit animation delay
     setTimeout(() => {
       localStorage.removeItem("user");
@@ -52,13 +52,13 @@ function App() {
     localStorage.setItem("debateTopic", topic);
     localStorage.setItem("userPosition", position);
     setIsDebateModalOpen(false);
-    setResetDebateKey(prev => prev + 1);
-    
+    setResetDebateKey((prev) => prev + 1);
+
     // If we are already in the flow, just let the state update
     // Otherwise, move to difficulty selection
     const path = window.location.pathname;
     if (path !== "/difficulty" && path !== "/debate") {
-       navigate("/difficulty");
+      navigate("/difficulty");
     }
   };
 
@@ -81,13 +81,65 @@ function App() {
       )}
 
       <Routes>
-        <Route path="/" element={<HomePage user={user} onLogout={handleLogout} onStartDebate={handleOpenDebateModal} />} />
+        <Route
+          path="/"
+          element={
+            <HomePage
+              user={user}
+              onLogout={handleLogout}
+              onStartDebate={handleOpenDebateModal}
+            />
+          }
+        />
         <Route path="/login" element={<AuthPage onLogin={handleLogin} />} />
-        <Route path="/difficulty" element={<DifficultyPage user={user} onLogout={handleLogout} onStartDebate={handleOpenDebateModal} resetKey={resetDebateKey} />} />
-        <Route path="/difficulty-selection" element={<DifficultyPage user={user} onLogout={handleLogout} onStartDebate={handleOpenDebateModal} resetKey={resetDebateKey} />} />
-        <Route path="/debate" element={<DebatePage user={user} onLogout={handleLogout} onStartDebate={handleOpenDebateModal} key={resetDebateKey} />} />
-        <Route path="/debate-room" element={<DebatePage user={user} onLogout={handleLogout} onStartDebate={handleOpenDebateModal} key={resetDebateKey} />} />
-        <Route path="/dashboard" element={<DashboardPage user={user} onLogout={handleLogout} />} />
+        <Route
+          path="/difficulty"
+          element={
+            <DifficultyPage
+              user={user}
+              onLogout={handleLogout}
+              onStartDebate={handleOpenDebateModal}
+              resetKey={resetDebateKey}
+            />
+          }
+        />
+        <Route
+          path="/difficulty-selection"
+          element={
+            <DifficultyPage
+              user={user}
+              onLogout={handleLogout}
+              onStartDebate={handleOpenDebateModal}
+              resetKey={resetDebateKey}
+            />
+          }
+        />
+        <Route
+          path="/debate"
+          element={
+            <DebatePage
+              user={user}
+              onLogout={handleLogout}
+              onStartDebate={handleOpenDebateModal}
+              key={resetDebateKey}
+            />
+          }
+        />
+        <Route
+          path="/debate-room"
+          element={
+            <DebatePage
+              user={user}
+              onLogout={handleLogout}
+              onStartDebate={handleOpenDebateModal}
+              key={resetDebateKey}
+            />
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={<DashboardPage user={user} onLogout={handleLogout} />}
+        />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>

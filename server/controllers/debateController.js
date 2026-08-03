@@ -49,7 +49,7 @@ export async function startDebate(req, res) {
 }
 
 export async function debateMessage(req, res) {
-  const { message, topic, position, difficulty, history } = req.body;
+  const { message, topic, position, difficulty, history, replyLang } = req.body;
 
   if (!message || !topic || !position) {
     res.status(400).json({ error: "Message, topic, and position are required." });
@@ -57,7 +57,7 @@ export async function debateMessage(req, res) {
   }
 
   try {
-    const reply = await getAIReply(message, topic, position, difficulty, history);
+    const reply = await getAIReply(message, topic, position, difficulty, history, replyLang);
     res.json({ reply });
   } catch (err) {
     console.error("Error generating reply:", err.message);
