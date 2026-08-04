@@ -2,7 +2,7 @@
 
 > **A Transparent AI Debate Partner for Educational Excellence & Critical Thinking**
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Khursheed5898/DiBot.AI)
+
 ![React 19](https://img.shields.io/badge/React-19.1-blue?logo=react)
 ![Vite 7](https://img.shields.io/badge/Vite-7.1-646CFF?logo=vite)
 ![Node.js](https://img.shields.io/badge/Node.js-v18%2B-green?logo=node.js)
