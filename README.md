@@ -164,7 +164,6 @@ DiBot.AI/
 │   └── server.js               # Entry point for Express HTTP & WebSocket server
 ├── scripts/                    # Development automation scripts (`dev-runner.cjs`)
 ├── AWS_EC2_Deployment_Guide.md # Comprehensive AWS EC2 + Nginx + PM2 setup guide
-├── DiBot_AI_Interview_Placement_Guide.md # Technical breakdown & interview preparation guide
 ├── render.yaml                 # Render cloud deployment specification
 └── README.md                   # Project documentation
 ```
@@ -182,12 +181,6 @@ For full control, refer to our detailed [`AWS_EC2_Deployment_Guide.md`](./AWS_EC
 - PM2 process management & auto-restart on reboot
 - Nginx reverse proxy setup (Port 80 → Port 5000)
 - System swap allocation and SSL configuration
-
----
-
-## 🎓 Educational & Interview Reference
-
-For deep technical insights into DiBot.AI's system architecture, design decisions, and AI prompt engineering techniques, see [`DiBot_AI_Interview_Placement_Guide.md`](./DiBot_AI_Interview_Placement_Guide.md).
 
 ---
 
