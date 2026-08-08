@@ -66,14 +66,7 @@ function Header({ onStartDebate, user, onLogout, currentStep = "home" }) {
       }`}
     >
       <div className="container">
-        <nav
-          className="navbar"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr auto 1fr",
-            alignItems: "center",
-          }}
-        >
+        <nav className="navbar">
           <button
             type="button"
             className="mobile-toggle"

@@ -21,6 +21,7 @@ DiBot.Ai is a transparent AI debate partner for education. It reveals AI reasoni
 - **Naming**: Use camelCase for JS/JSX and kebab-case for CSS classes.
 - **Styling**: Follow the "Mercury" design language (silver, metallic, high-fidelity glass).
 - **Components**: Functional components with hooks.
+- **Review Before Execute**: Always prepare and present a detailed review/plan of all proposed changes first. DO NOT implement code changes until the user explicitly responds with "ok" or "apply".
 <!-- GSD:conventions-end -->
 
 <!-- GSD:workflow-start -->

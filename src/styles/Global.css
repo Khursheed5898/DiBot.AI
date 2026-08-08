@@ -293,11 +293,16 @@ img {
 }
 
 .btn-premium.btn-sm {
-  padding: 5px 12px !important;
-  font-size: 9.5px !important;
-  height: auto !important;
+  padding: 8px 18px !important;
+  font-size: 11.5px !important;
+  min-height: 38px !important;
+  height: 38px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   border-radius: 20px !important;
   letter-spacing: 1.2px !important;
+  box-sizing: border-box !important;
 }
 .btn-secondary {
   background-color: transparent;
@@ -320,6 +325,10 @@ header {
   top: 0;
   z-index: 1000;
   overflow: visible !important;
+  min-height: 70px !important;
+  display: flex !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
 }
 
 header::before {
@@ -343,7 +352,9 @@ header::before {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.4rem 0;
+  padding: 0.85rem 0 !important;
+  min-height: 70px !important;
+  box-sizing: border-box !important;
 }
 
 .logo {
@@ -1300,6 +1311,7 @@ footer::before {
 @media (min-width: 1024px) {
   header {
     overflow: visible !important;
+    min-height: 70px !important;
   }
 
   .drawer-header,
@@ -1317,6 +1329,9 @@ footer::before {
     position: relative !important;
     width: 100% !important;
     overflow: visible !important;
+    min-height: 70px !important;
+    padding: 0.85rem 0 !important;
+    box-sizing: border-box !important;
   }
 
   .header-left-group {
@@ -1326,7 +1341,9 @@ footer::before {
   }
 
   .header-left-group .logo {
-    font-size: 1.4rem !important;
+    font-size: 1.62rem !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.5px !important;
   }
 
   .nav-actions {
@@ -1436,14 +1453,16 @@ footer::before {
     overflow: visible !important;
   }
 
-  /* 1. Navbar flex container */
+  /* 1. Navbar flex container - Increased height to 60px-66px */
   .navbar {
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
     position: relative !important;
     width: 100% !important;
-    padding: 0.4rem 0 !important;
+    padding: 0.85rem 0 !important;
+    min-height: 60px !important;
+    box-sizing: border-box !important;
   }
 
   /* Hide DiBot.AI logo on mobile & tablet sizes from difficulty level onwards */
@@ -1463,8 +1482,9 @@ footer::before {
   }
 
   .header-left-group .logo {
-    font-size: 1.15rem !important;
+    font-size: 1.45rem !important;
     white-space: nowrap !important;
+    letter-spacing: -0.5px !important;
   }
 
   /* 3. Nav actions spans full width */
@@ -1476,23 +1496,24 @@ footer::before {
     position: static !important;
   }
 
-  /* 4. Compact 3-line Icon Box (30px x 30px) */
+  /* 4. Touch-Friendly Icon Box (38px x 38px) */
   .mobile-toggle {
     display: flex !important;
     align-items: center;
     justify-content: center;
-    width: 24px !important;
-    height: 24px !important;
-    border-radius: 5px !important;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 8px !important;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     color: #ffffff;
-    font-size: 0.72rem !important;
+    font-size: 1.15rem !important;
     cursor: pointer;
     order: -1 !important;
     margin-right: auto !important;
-    margin-left: -10px !important;
+    margin-left: 0 !important;
     z-index: 100000 !important;
+    transition: all 0.2s ease;
   }
 
   .mobile-toggle:hover {
@@ -1504,14 +1525,17 @@ footer::before {
   .nav-actions .btn-premium {
     order: 1 !important;
     margin-left: auto !important;
-    margin-right: 8px !important;
-    padding: 5px 10px !important;
-    font-size: 9.5px !important;
-    white-space: nowrap;
-    border-radius: 20px;
-    z-index: 10 !important;
-    margin-left: auto !important;
     margin-right: 0 !important;
+    padding: 7px 14px !important;
+    font-size: 10.5px !important;
+    white-space: nowrap !important;
+    border-radius: 18px !important;
+    z-index: 10 !important;
+    min-height: 34px !important;
+    height: 34px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
   /* 6. LEFT-SIDE SLIDE-IN DRAWER MENU */
@@ -1572,12 +1596,12 @@ footer::before {
     transform: translateX(5px);
   }
 
-  /* Drawer Top Bar: Exact 37px height (100% Header Line Match) */
+  /* Drawer Top Bar: Exact 60px height (100% Header Line Match) */
   .drawer-header {
     display: flex !important;
     justify-content: flex-end !important;
     align-items: center !important;
-    height: 37px !important;
+    height: 60px !important;
     box-sizing: border-box !important;
     padding: 0 0.5rem !important;
     margin-bottom: 0.45rem !important;
@@ -1743,75 +1767,207 @@ footer::before {
   }
 
   /* Small Mobile (<= 425px) Header Stepper & Profile Pill */
+  /* 425px Mobile Breakpoint */
   @media (max-width: 425px) {
+    header {
+      min-height: 55px !important;
+      height: 55px !important;
+    }
+
+    .navbar {
+      min-height: 55px !important;
+      height: 55px !important;
+      padding: 0.55rem 0 !important;
+    }
+
+    .drawer-header {
+      height: 55px !important;
+    }
+
+    .mobile-toggle {
+      width: 30px !important;
+      height: 30px !important;
+      font-size: 0.9rem !important;
+      border-radius: 7px !important;
+      margin: 0 !important;
+    }
+
     .header-stepper {
-      font-size: 7.8px !important;
-      padding: 2.5px 6px !important;
-      gap: 2.5px !important;
-      left: 44.5% !important;
+      font-size: 9px !important;
+      padding: 3px 7px !important;
+      gap: 3px !important;
+      left: 44% !important;
       transform: translate(-50%, -50%) !important;
+      border-radius: 12px !important;
+      max-width: calc(100vw - 80px) !important;
     }
 
     .header-stepper .step-item {
-      font-size: 7.8px !important;
-      padding: 1px 4px !important;
+      font-size: 9px !important;
+      padding: 2px 4.5px !important;
       letter-spacing: 0.1px !important;
       font-weight: 700 !important;
+      border-radius: 6px !important;
     }
 
     .header-stepper .step-arrow {
-      font-size: 7px !important;
+      font-size: 8px !important;
       margin: 0 1px !important;
     }
 
     .user-profile-badge-wrapper {
-      right: -25px !important;
+      right: -2px !important;
     }
 
     .user-name-pill {
-      padding: 2.5px 3.5px !important;
-      font-size: 8.5px !important;
-      gap: 1.5px !important;
+      padding: 3.5px 7.5px !important;
+      font-size: 10px !important;
+      gap: 2.5px !important;
+      border-radius: 12px !important;
+    }
+
+    .user-name-pill .avatar {
+      width: 15px !important;
+      height: 15px !important;
+      font-size: 9px !important;
+    }
+
+    header:not(.setup-header) .user-name-pill {
+      padding: 5px 11px !important;
+      min-height: 29px !important;
+      font-size: 11px !important;
       border-radius: 14px !important;
     }
 
-    /* Hide DiBot.AI logo ONLY on small mobile screens (<= 425px) from difficulty level onwards */
+    header:not(.setup-header) .user-name-pill .avatar {
+      width: 16px !important;
+      height: 16px !important;
+      font-size: 9px !important;
+    }
+
+    .nav-actions .btn-premium {
+      padding: 6.5px 13px !important;
+      font-size: 10.5px !important;
+      min-height: 34px !important;
+      height: 34px !important;
+    }
+
+    .header-left-group .logo {
+      font-size: 1.28rem !important;
+    }
+
     header.hide-mobile-logo .header-left-group .logo {
       display: none !important;
     }
 
     .pill-arrow {
-      font-size: 6.5px !important;
+      font-size: 8.5px !important;
+    }
+  }
+
+  /* 375px Screen Optimization */
+  @media (max-width: 380px) {
+    .mobile-toggle {
+      width: 27px !important;
+      height: 27px !important;
+      font-size: 0.82rem !important;
+      border-radius: 6px !important;
+    }
+
+    .header-stepper {
+      font-size: 8.5px !important;
+      padding: 2.5px 5.5px !important;
+      gap: 2.2px !important;
+      left: 43% !important;
+    }
+
+    .header-stepper .step-item {
+      font-size: 8.2px !important;
+      padding: 1.8px 3.8px !important;
+    }
+
+    .header-stepper .step-arrow {
+      font-size: 7.5px !important;
+    }
+
+    .user-profile-badge-wrapper {
+      right: -4px !important;
+    }
+
+    .user-name-pill {
+      padding: 3px 6px !important;
+      font-size: 9.2px !important;
+    }
+
+    header:not(.setup-header) .user-name-pill {
+      padding: 4.5px 9.5px !important;
+      min-height: 27px !important;
+      font-size: 10.5px !important;
+      border-radius: 12px !important;
+    }
+
+    header:not(.setup-header) .user-name-pill .avatar {
+      width: 15px !important;
+      height: 15px !important;
+      font-size: 8.5px !important;
     }
   }
 
   /* 320px Ultra-Small Screen Precision Adjustment */
   @media (max-width: 330px) {
+    .mobile-toggle {
+      width: 24px !important;
+      height: 24px !important;
+      font-size: 0.75rem !important;
+      border-radius: 5px !important;
+    }
+
     .header-stepper {
-      font-size: 6.6px !important;
-      padding: 2px 3.5px !important;
+      font-size: 7.5px !important;
+      padding: 2px 4px !important;
       gap: 1.5px !important;
-      left: 44.5% !important;
+      left: 42% !important;
     }
 
     .header-stepper .step-item {
-      font-size: 6.6px !important;
-      padding: 1px 2px !important;
-      letter-spacing: 0px !important;
+      font-size: 7.5px !important;
+      padding: 1.5px 3px !important;
+      letter-spacing: -0.2px !important;
     }
 
     .header-stepper .step-arrow {
-      font-size: 6px !important;
+      font-size: 6.5px !important;
       margin: 0 !important;
     }
 
     .user-profile-badge-wrapper {
-      right: -25px !important;
+      right: -5px !important;
     }
 
     .user-name-pill {
-      padding: 2px 3px !important;
-      font-size: 7.8px !important;
+      padding: 2px 5px !important;
+      font-size: 8.5px !important;
+      gap: 1.5px !important;
+      border-radius: 8px !important;
+    }
+
+    .user-name-pill .avatar {
+      width: 13px !important;
+      height: 13px !important;
+      font-size: 7.5px !important;
+    }
+
+    header:not(.setup-header) .user-name-pill {
+      padding: 3.5px 8px !important;
+      min-height: 25px !important;
+      font-size: 9.5px !important;
+      border-radius: 10px !important;
+    }
+
+    header:not(.setup-header) .user-name-pill .avatar {
+      width: 14px !important;
+      height: 14px !important;
+      font-size: 8px !important;
     }
   }
 
@@ -2015,16 +2171,24 @@ footer::before {
 @media (max-width: 425px) {
   header .nav-actions .btn-premium,
   header .nav-actions .user-name-pill {
-    margin-right: -5px !important;
-    transform: translateX(3px) !important;
+    margin-right: -8px !important;
+    transform: translateX(6px) !important;
   }
 }
 
 @media (max-width: 375px) {
-  header .nav-actions .btn-premium,
+  header .nav-actions .btn-premium {
+    margin-right: -12px !important;
+    transform: translateX(10px) !important;
+    padding: 5px 10px !important;
+    font-size: 9.8px !important;
+  }
   header .nav-actions .user-name-pill {
     margin-right: -7px !important;
     transform: translateX(5px) !important;
+  }
+  header .header-left-group .logo {
+    font-size: 1.16rem !important;
   }
 }
 
@@ -2045,4 +2209,45 @@ footer::before {
   background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(4px);
   z-index: 99998;
+}
+
+/* Universal Card Alignment: Centered Headings & Icons, Justified Paragraph Text */
+.feature-card h3,
+.step-card h3,
+.persona-card h3,
+.difficulty-card h3,
+.card h3 {
+  text-align: center !important;
+}
+
+.feature-icon,
+.step-number {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.feature-card p,
+.step-card p,
+.persona-card p,
+.difficulty-card p,
+.testimonial-content,
+.testimonial-card p,
+.card p {
+  text-align: justify !important;
+  text-justify: inter-word !important;
+}
+
+/* Mobile Below Tablet (< 600px) Typography & Center Text Optimization */
+@media (max-width: 600px) {
+  .feature-card p,
+  .step-card p,
+  .persona-card p,
+  .difficulty-card p,
+  .testimonial-content,
+  .testimonial-card p,
+  .card p {
+    text-align: center !important;
+    font-size: 0.72rem !important;
+    line-height: 1.3 !important;
+  }
 }

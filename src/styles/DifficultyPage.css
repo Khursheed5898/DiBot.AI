@@ -310,6 +310,7 @@
   gap: 2rem;
   justify-content: center;
   align-items: center;
+  margin-bottom: 1.25rem !important;
 }
 
 .btn-back {
@@ -349,45 +350,45 @@
 }
 
 .btn-proceed {
-  background: linear-gradient(45deg, #4f8ef7, #a855f7, #4f8ef7);
-  background-size: 200% auto;
-  border: none;
-  color: white;
+  background: linear-gradient(
+    135deg,
+    #111418 0%,
+    #2b323c 20%,
+    #4a5568 40%,
+    #1f242d 60%,
+    #3a424e 80%,
+    #0d1014 100%
+  ) !important;
+  background-size: 300% 300% !important;
+  animation: dark-silver-metallic-fluid 8s ease infinite, metallic-pulse-glow 3s ease-in-out infinite !important;
+  border: 1px solid rgba(226, 232, 240, 0.35) !important;
+  color: #ffffff !important;
   padding: 18px 56px;
   border-radius: 100px;
   font-weight: 800;
   font-size: 1.1rem;
   cursor: pointer;
-  box-shadow: 0 15px 35px rgba(79, 142, 247, 0.3);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.35), 0 0 20px rgba(148, 163, 184, 0.2) !important;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
   transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-  animation: btn-fluid-color 4s linear infinite;
-}
-
-/* Sync Proceed Button with Selected Difficulty */
-.btn-proceed.beginner {
-  background: linear-gradient(45deg, #22c55e, #10b981, #22c55e);
-  background-size: 200% auto;
-  box-shadow: 0 15px 35px rgba(34, 197, 94, 0.3);
-}
-.btn-proceed.intermediate {
-  background: linear-gradient(45deg, #f59e0b, #d97706, #f59e0b);
-  background-size: 200% auto;
-  box-shadow: 0 15px 35px rgba(245, 158, 11, 0.3);
-}
-.btn-proceed.advanced {
-  background: linear-gradient(45deg, #ef4444, #dc2626, #ef4444);
-  background-size: 200% auto;
-  box-shadow: 0 15px 35px rgba(239, 68, 68, 0.3);
-}
-.btn-proceed.expert {
-  background: linear-gradient(45deg, #a855f7, #7c3aed, #a855f7);
-  background-size: 200% auto;
-  box-shadow: 0 15px 35px rgba(168, 85, 247, 0.3);
 }
 
 .btn-proceed:hover {
-  transform: translateY(-5px) scale(1.05);
-  filter: brightness(1.1);
+  background: linear-gradient(
+    135deg,
+    #181e26 0%,
+    #384250 25%,
+    #64748b 50%,
+    #2a323d 75%,
+    #181e26 100%
+  ) !important;
+  background-size: 300% 300% !important;
+  border-color: rgba(255, 255, 255, 0.6) !important;
+  transform: translateY(-5px) scale(1.03);
+  box-shadow:
+    0 20px 45px rgba(0, 0, 0, 0.7),
+    0 0 30px rgba(226, 232, 240, 0.4),
+    inset 0 1px 3px rgba(255, 255, 255, 0.5) !important;
   letter-spacing: 1px;
 }
 
@@ -545,5 +546,103 @@
     width: auto !important;
     max-width: 235px !important;
     margin: 0 auto !important;
+  }
+}
+
+/* ── Small Mobile (<= 425px & 320px) Header & Layout Precision ── */
+@media (max-width: 425px) {
+  .difficulty-container {
+    padding: 1rem 0.6rem 1rem 0.6rem !important;
+  }
+
+  .difficulty-actions {
+    margin-bottom: 1.25rem !important;
+  }
+
+  .difficulty-title {
+    font-size: 1.25rem !important;
+    letter-spacing: 0.3px !important;
+    margin: 0.4rem 0 0.8rem 0 !important;
+    line-height: 1.3 !important;
+    text-align: center !important;
+  }
+
+  .topic-summary-pill {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+    padding: 6px 14px !important;
+    margin: 0 auto 1.4rem auto !important;
+    max-width: 95% !important;
+    border-radius: 20px !important;
+    box-sizing: border-box !important;
+  }
+
+  .live-indicator {
+    width: 7px !important;
+    height: 7px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .topic-text {
+    font-size: 11px !important;
+    line-height: 1.3 !important;
+    max-width: 200px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    text-align: center !important;
+  }
+
+  .stance-badge {
+    font-size: 9px !important;
+    padding: 2.5px 8px !important;
+    font-weight: 800 !important;
+    flex-shrink: 0 !important;
+  }
+
+  .difficulty-cards-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.6rem !important;
+    margin-bottom: 1.5rem !important;
+    width: 100% !important;
+  }
+
+  .difficulty-card {
+    padding: 0.75rem 0.6rem !important;
+    border-radius: 16px !important;
+    min-height: 0 !important;
+  }
+
+  .card-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin-bottom: 0.35rem !important;
+  }
+
+  .card-label {
+    font-size: 0.88rem !important;
+    font-weight: 800 !important;
+  }
+
+  .card-icon {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 0.95rem !important;
+    border-radius: 8px !important;
+  }
+
+  .card-description {
+    font-size: 0.68rem !important;
+    line-height: 1.3 !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .tag-pill {
+    padding: 2.5px 6px !important;
+    font-size: 8.5px !important;
   }
 }

@@ -58,6 +58,7 @@ function DifficultyPage({ user, onLogout, onStartDebate }) {
   const [rounds, setRounds] = useState(3);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const savedTopic = localStorage.getItem("debateTopic");
     const savedPosition = localStorage.getItem("userPosition");
     
