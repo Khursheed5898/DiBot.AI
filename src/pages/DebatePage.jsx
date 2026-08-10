@@ -377,15 +377,26 @@ function DebatePage({ user, onLogout, onStartDebate }) {
   const voicesRef = useRef([]);
   const captionTimerRef = useRef(null);
 
-  // Voice Engine Setup
+  // Voice Engine Setup — with mobile async retry
   useEffect(() => {
     const loadVoices = () => {
-      voicesRef.current = window.speechSynthesis.getVoices();
+      const v = window.speechSynthesis.getVoices();
+      if (v.length > 0) {
+        voicesRef.current = v;
+      }
     };
     loadVoices();
     if (window.speechSynthesis.onvoiceschanged !== undefined) {
       window.speechSynthesis.onvoiceschanged = loadVoices;
     }
+    // Mobile fallback: Android/iOS loads voices late — retry a few times
+    const retryIntervals = [300, 700, 1500, 3000];
+    retryIntervals.forEach((delay) => {
+      setTimeout(() => {
+        const v = window.speechSynthesis.getVoices();
+        if (v.length > 0) voicesRef.current = v;
+      }, delay);
+    });
   }, []);
 
   const speakText = (text, role, onComplete) => {
@@ -442,7 +453,7 @@ function DebatePage({ user, onLogout, onStartDebate }) {
     if (role === "ai") {
       let aiVoice = null;
 
-      // Male-Only Filter: Exclude female voices (Swara, Kalpana, Zira, Aria, Jennie, etc.)
+      // Male-Only Filter: Exclude known female voices across Desktop + Android + iOS
       const isMale = (v) => {
         const name = v.name.toLowerCase();
         return (
@@ -453,7 +464,15 @@ function DebatePage({ user, onLogout, onStartDebate }) {
           !name.includes("aria") &&
           !name.includes("jennie") &&
           !name.includes("victoria") &&
-          !name.includes("samantha")
+          !name.includes("samantha") &&
+          !name.includes("karen") &&
+          !name.includes("moira") &&
+          !name.includes("tessa") &&
+          !name.includes("fiona") &&
+          !name.includes("veena") &&
+          !name.includes("neerja") &&
+          !name.includes("google uk english female") &&
+          !name.includes("google us english female")
         );
       };
 
@@ -470,13 +489,17 @@ function DebatePage({ user, onLogout, onStartDebate }) {
           voices.find((v) => v.lang.toLowerCase().startsWith("hi")) ||
           voices.find((v) => v.lang.toLowerCase().startsWith("en-in"));
       } else if (replyLang === "hinglish") {
-        // HINGLISH: RESET TO MALE Indian Voice (Microsoft Prabhat, Madhur, Male Indian English)
+        // HINGLISH: Male Indian Voice — Prabhat (Windows), Rishi (iOS), Madhur, or any male en-IN
         aiVoice =
           voices.find(
             (v) =>
               (v.lang.toLowerCase().startsWith("en-in") ||
                 v.lang.toLowerCase().startsWith("hi")) &&
               v.name.toLowerCase().includes("prabhat"),
+          ) ||
+          voices.find(
+            (v) =>
+              v.name.toLowerCase().includes("rishi") && isMale(v),
           ) ||
           voices.find(
             (v) =>
@@ -490,9 +513,13 @@ function DebatePage({ user, onLogout, onStartDebate }) {
                 v.lang.toLowerCase().startsWith("hi")) &&
               isMale(v),
           ) ||
-          voices.find((v) => v.lang.toLowerCase().startsWith("en-in"));
+          voices.find(
+            (v) => v.name.toLowerCase().includes("google uk english male"),
+          ) ||
+          voices.find((v) => v.lang.toLowerCase().startsWith("en-in")) ||
+          voices.find((v) => v.lang.startsWith("en") && isMale(v));
       } else {
-        // Pure English: Male Neural / Cloud Voices (Andrew, Ryan, David, Guy, Google Male)
+        // Pure English: Male Neural / Cloud Voices (Andrew, Ryan, David, Guy, Daniel, Arthur, Google UK Male)
         aiVoice =
           voices.find(
             (v) => v.name.toLowerCase().includes("andrew") && isMale(v),
@@ -505,6 +532,19 @@ function DebatePage({ user, onLogout, onStartDebate }) {
           ) ||
           voices.find(
             (v) => v.name.toLowerCase().includes("david") && isMale(v),
+          ) ||
+          voices.find(
+            (v) => v.name.toLowerCase().includes("daniel") && isMale(v),
+          ) ||
+          voices.find(
+            (v) => v.name.toLowerCase().includes("arthur") && isMale(v),
+          ) ||
+          voices.find(
+            (v) => v.name.toLowerCase().includes("alex") && isMale(v),
+          ) ||
+          voices.find(
+            (v) =>
+              v.name.toLowerCase().includes("google uk english male"),
           ) ||
           voices.find(
             (v) =>
