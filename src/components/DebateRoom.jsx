@@ -58,7 +58,15 @@ const DebateRoom = ({ onEndDebate }) => {
   });
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    // Scroll only inside the messages container — never the whole page
+    if (messagesEndRef.current) {
+      const container = messagesEndRef.current.closest(".messages-container") ||
+        messagesEndRef.current.closest(".messages-list") ||
+        messagesEndRef.current.parentElement;
+      if (container) {
+        container.scrollTop = container.scrollHeight;
+      }
+    }
   }, [messages, isAiTyping]);
 
   // Handle Hard Errors (e.g. permissions blocked)

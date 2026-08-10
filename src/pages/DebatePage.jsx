@@ -49,23 +49,12 @@ const TypewriterMessage = ({ text, onComplete, onUpdate }) => {
 };
 
 const scrollToBottom = (ref) => {
-  if (ref && ref.current) {
-    ref.current.scrollIntoView({ behavior: "smooth", block: "end" });
-    const container =
-      ref.current.closest(".messages-list") ||
-      document.querySelector(".messages-list");
-    if (container) {
-      container.scrollTop = container.scrollHeight;
-    }
-  } else {
-    const container = document.querySelector(".messages-list");
-    if (container) {
-      container.scrollTop = container.scrollHeight;
-    }
-    const end = document.getElementById("chat-bottom-anchor");
-    if (end) {
-      end.scrollIntoView({ behavior: "smooth", block: "end" });
-    }
+  // Only scroll the internal container — never the page/window
+  const container =
+    (ref && ref.current && ref.current.closest(".messages-list")) ||
+    document.querySelector(".messages-list");
+  if (container) {
+    container.scrollTop = container.scrollHeight;
   }
 };
 
@@ -635,10 +624,15 @@ function DebatePage({ user, onLogout, onStartDebate }) {
     window.speechSynthesis.speak(utterance);
   };
 
-  // Auto-scroll captions
+  // Auto-scroll captions — scroll only inside caption container, never the whole page
   useEffect(() => {
     if (captionEndRef.current) {
-      captionEndRef.current.scrollIntoView({ behavior: "smooth" });
+      const captionContainer = captionEndRef.current.closest(".live-caption-box") ||
+        captionEndRef.current.closest(".live-status-bar") ||
+        captionEndRef.current.parentElement;
+      if (captionContainer) {
+        captionContainer.scrollTop = captionContainer.scrollHeight;
+      }
     }
   }, [liveCaption, activeSpeaker]);
 
@@ -761,13 +755,18 @@ function DebatePage({ user, onLogout, onStartDebate }) {
   }, []);
 
   const scrollToBottom = useCallback(() => {
-    if (chatEndRef.current) {
-      chatEndRef.current.scrollIntoView({ behavior: "auto", block: "end" });
-      const container = chatEndRef.current.closest(".messages-list");
-      if (container) {
-        container.scrollTop = container.scrollHeight;
-      }
+    // Only scroll the messages container — never the page/window
+    const container =
+      (chatEndRef.current && chatEndRef.current.closest(".messages-list")) ||
+      document.querySelector(".messages-list");
+    if (container) {
+      container.scrollTop = container.scrollHeight;
     }
+  }, []);
+
+  // Scroll to top of page on mount so header is always visible
+  useEffect(() => {
+    window.scrollTo(0, 0);
   }, []);
 
   useEffect(() => {
