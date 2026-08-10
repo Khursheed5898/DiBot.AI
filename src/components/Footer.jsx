@@ -19,13 +19,13 @@ function Footer() {
               <a href="https://github.com/Khursheed5898" className="social-icon github" aria-label="GitHub" target="_blank" rel="noopener noreferrer">
                 <i className="fab fa-github" />
               </a>
-              <a href="https://linkedin.com/in/khursheed5898" className="social-icon linkedin" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
+              <a href="https://www.linkedin.com/in/khursheed-alam-51a76121b" className="social-icon linkedin" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
                 <i className="fab fa-linkedin-in" />
               </a>
-              <a href="https://instagram.com/khursheed5898" className="social-icon instagram" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+              <a href="https://www.instagram.com/khursheed4k" className="social-icon instagram" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
                 <i className="fab fa-instagram" />
               </a>
-              <a href="https://youtube.com/@khursheed5898" className="social-icon youtube" aria-label="YouTube" target="_blank" rel="noopener noreferrer">
+              <a href="https://www.youtube.com/@khursheed4k" className="social-icon youtube" aria-label="YouTube" target="_blank" rel="noopener noreferrer">
                 <i className="fab fa-youtube" />
               </a>
             </div>
