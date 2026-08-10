@@ -75,10 +75,49 @@ function DebatePage({ user, onLogout, onStartDebate }) {
   const [difficulty, setDifficulty] = useState("");
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
+  const chatTextareaRef = useRef(null);
+  const liveTextareaRef = useRef(null);
+
+  const handleChatTextareaChange = (e) => {
+    setInputValue(e.target.value);
+    const el = e.target;
+    el.style.height = "auto";
+    el.style.height = `${Math.min(el.scrollHeight, 110)}px`;
+  };
+
+  const handleChatTextareaKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+      if (chatTextareaRef.current) {
+        chatTextareaRef.current.style.height = "auto";
+      }
+    }
+  };
+
+  const handleLiveTextareaChange = (e) => {
+    setLiveTextInputVal(e.target.value);
+    const el = e.target;
+    el.style.height = "auto";
+    el.style.height = `${Math.min(el.scrollHeight, 110)}px`;
+  };
+
+  const handleLiveTextareaKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSendLiveText();
+      if (liveTextareaRef.current) {
+        liveTextareaRef.current.style.height = "auto";
+      }
+    }
+  };
   const [timeLeft, setTimeLeft] = useState(600); // Initialized to dynamic default
   const [round, setRound] = useState(1);
   const [totalRounds, setTotalRounds] = useState(5); // Tracks user chosen rounds state
-  const [isLive, setIsLive] = useState(false);
+  const [isLive, setIsLive] = useState(() => {
+    const savedRoomMode = localStorage.getItem("debateRoomMode");
+    return savedRoomMode === "live";
+  });
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showEndModal, setShowEndModal] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -91,6 +130,29 @@ function DebatePage({ user, onLogout, onStartDebate }) {
   });
   const [activeSpeaker, setActiveSpeaker] = useState("user"); // 'user' or 'ai'
   const [replyLang, setReplyLang] = useState("english"); // UI controller for explicitly overriding AI response language
+
+  const handleLangChange = (newLang) => {
+    if (replyLang === newLang) return;
+    setReplyLang(newLang);
+
+    // Dynamic instant speech cancellation & language shift
+    if (window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
+    if (captionTimerRef.current) {
+      clearInterval(captionTimerRef.current);
+    }
+
+    // If AI is currently speaking, re-speak current response in the new language engine
+    if (activeSpeaker === "ai") {
+      const lastAiMsg = [...messages].reverse().find((m) => m.role === "ai");
+      if (lastAiMsg && lastAiMsg.content) {
+        speakText(lastAiMsg.content, "ai", () => {
+          setActiveSpeaker("user");
+        });
+      }
+    }
+  };
   const isProcessingRef = useRef(false); // ATOMIC LOCK to prevent double-submission loops
   const [showLiveTextInput, setShowLiveTextInput] = useState(false);
   const [liveTextInputVal, setLiveTextInputVal] = useState("");
@@ -313,6 +375,7 @@ function DebatePage({ user, onLogout, onStartDebate }) {
   const chatEndRef = useRef(null);
   const captionEndRef = useRef(null);
   const voicesRef = useRef([]);
+  const captionTimerRef = useRef(null);
 
   // Voice Engine Setup
   useEffect(() => {
@@ -328,40 +391,47 @@ function DebatePage({ user, onLogout, onStartDebate }) {
   const speakText = (text, role, onComplete) => {
     if (!window.speechSynthesis) return;
     window.speechSynthesis.cancel();
+    if (captionTimerRef.current) clearInterval(captionTimerRef.current);
 
-    // Clean text for speech synthesis (strip markdown and emojis)
-    // 1. AGGRESSIVE TEXT CLEANER: Prevents "Glitchy" sounds by removing ALL markdown/emojis
+    // Refresh voices list in case voices loaded asynchronously
+    const freshVoices = window.speechSynthesis.getVoices();
+    const voices = freshVoices.length > 0 ? freshVoices : voicesRef.current;
+
+    // Clean text for speech synthesis (strip all section header titles, markdown, hashes, emojis, and symbols so voice ONLY speaks body sentences)
     const cleanText = text
-      .replace(/\\n/g, " ") // Nuclear Fix: Physically deletes literal backslash-n text strings
-      .replace(/\n/g, " ") // Remove real newlines
-      .replace(/[#*`_~[\]()\\|]+/g, " ") // Absolute wipe of all markdown, hashes, and bars
-      .replace(
-        /[\u{1F300}-\u{1F9FF}\u{2600}-\u{27BF}\u{1F1E0}-\u{1F1FF}]/gu,
-        "",
-      ) // Destroy Emojis
-      .replace(/\s+/g, " ") // Condense to single spaces
+      .replace(/###\s*[\u{1F300}-\u{1F9FF}\u{2600}-\u{27BF}\u{1F1E0}-\u{1F1FF}\s\w\u0900-\u097F\-\/]+:/gu, " ")
+      .replace(/Counter-Analysis:?/gi, " ")
+      .replace(/Counter Analysis:?/gi, " ")
+      .replace(/Deep Stance:?/gi, " ")
+      .replace(/Challenge:?/gi, " ")
+      .replace(/प्रति-विश्लेषण:?/g, " ")
+      .replace(/प्रति विश्लेषण:?/g, " ")
+      .replace(/मुख्य दृष्टिकोण:?/g, " ")
+      .replace(/प्रश्न \/ चुनौती:?/g, " ")
+      .replace(/प्रश्न चुनौती:?/g, " ")
+      .replace(/\\n/g, " ")
+      .replace(/\n/g, " ")
+      .replace(/###/g, " ")
+      .replace(/[#*`_~[\]()\\|]+/g, " ")
+      .replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{27BF}\u{1F1E0}-\u{1F1FF}]/gu, "")
+      .replace(/\s+/g, " ")
       .trim();
 
-    // 1. Intelligent Language & Speed Detection
     const containsHindi = /[\u0900-\u097F]/.test(cleanText);
-    const isHindiSpeedMode =
-      containsHindi || replyLang === "hindi" || replyLang === "hinglish";
     let phoneticText = cleanText;
 
     if (containsHindi) {
-      // PHONETIC PATCHES: Fixes common English pronunciation quirks in Hindi voice engines!
       phoneticText = phoneticText
-        .replace(/\bAI\b/g, "ए आई") // Forces "A I" pronunciation
+        .replace(/\bAI\b/g, "ए आई")
         .replace(/\bA\.I\b/g, "ए आई")
-        .replace(/\bArtificial Intelligence\b/gi, "आर्टिफिशियल इंटेलिजेंस") // Forces fluent delivery
+        .replace(/\bArtificial Intelligence\b/gi, "आर्टिफिशियल इंटेलिजेंस")
         .replace(/\b(D|d)ebate\b/g, "डिबेट");
     }
 
     const utterance = new SpeechSynthesisUtterance(phoneticText);
-    const voices = voicesRef.current;
 
-    // Optimize language tag: Use en-IN for Romanized Hindi (Hinglish) to prevent thick US accent butchering it
-    if (containsHindi) {
+    // Set utterance language tag
+    if (containsHindi || replyLang === "hindi") {
       utterance.lang = "hi-IN";
     } else if (replyLang === "hinglish") {
       utterance.lang = "en-IN";
@@ -371,77 +441,154 @@ function DebatePage({ user, onLogout, onStartDebate }) {
 
     if (role === "ai") {
       let aiVoice = null;
-      if (containsHindi) {
-        // HIGH PRIORITY: BEST NATIVE HINDI PREMIUM VOICES
+
+      // Male-Only Filter: Exclude female voices (Swara, Kalpana, Zira, Aria, Jennie, etc.)
+      const isMale = (v) => {
+        const name = v.name.toLowerCase();
+        return (
+          !name.includes("swara") &&
+          !name.includes("kalpana") &&
+          !name.includes("female") &&
+          !name.includes("zira") &&
+          !name.includes("aria") &&
+          !name.includes("jennie") &&
+          !name.includes("victoria") &&
+          !name.includes("samantha")
+        );
+      };
+
+      if (containsHindi || replyLang === "hindi") {
+        // HINDI ONLY: Native Female Hindi Voice (Microsoft Swara, Kalpana, Google हिन्दी Female)
         aiVoice =
-          voices.find((v) => v.name.toLowerCase().includes("madhur")) || // Premium Microsoft Natural
           voices.find(
             (v) =>
               v.lang.toLowerCase().startsWith("hi") &&
-              v.name.toLowerCase().includes("neural"),
+              (v.name.toLowerCase().includes("swara") ||
+                v.name.toLowerCase().includes("kalpana") ||
+                v.name.toLowerCase().includes("female")),
           ) ||
-          voices.find((v) => v.lang.toLowerCase().startsWith("hi"));
-      } else {
-        // STANDARD HIGH-FIDELITY ENGLISH CLOUD VOICES
+          voices.find((v) => v.lang.toLowerCase().startsWith("hi")) ||
+          voices.find((v) => v.lang.toLowerCase().startsWith("en-in"));
+      } else if (replyLang === "hinglish") {
+        // HINGLISH: RESET TO MALE Indian Voice (Microsoft Prabhat, Madhur, Male Indian English)
         aiVoice =
           voices.find(
             (v) =>
-              v.name.toLowerCase().includes("neural") &&
-              (v.name.toLowerCase().includes("andrew") ||
-                v.name.toLowerCase().includes("ryan")),
+              (v.lang.toLowerCase().startsWith("en-in") ||
+                v.lang.toLowerCase().startsWith("hi")) &&
+              v.name.toLowerCase().includes("prabhat"),
+          ) ||
+          voices.find(
+            (v) =>
+              (v.lang.toLowerCase().startsWith("en-in") ||
+                v.lang.toLowerCase().startsWith("hi")) &&
+              v.name.toLowerCase().includes("madhur"),
+          ) ||
+          voices.find(
+            (v) =>
+              (v.lang.toLowerCase().startsWith("en-in") ||
+                v.lang.toLowerCase().startsWith("hi")) &&
+              isMale(v),
+          ) ||
+          voices.find((v) => v.lang.toLowerCase().startsWith("en-in"));
+      } else {
+        // Pure English: Male Neural / Cloud Voices (Andrew, Ryan, David, Guy, Google Male)
+        aiVoice =
+          voices.find(
+            (v) => v.name.toLowerCase().includes("andrew") && isMale(v),
+          ) ||
+          voices.find(
+            (v) => v.name.toLowerCase().includes("ryan") && isMale(v),
+          ) ||
+          voices.find(
+            (v) => v.name.toLowerCase().includes("guy") && isMale(v),
+          ) ||
+          voices.find(
+            (v) => v.name.toLowerCase().includes("david") && isMale(v),
           ) ||
           voices.find(
             (v) =>
               v.name.toLowerCase().includes("google us english") &&
               v.name.toLowerCase().includes("male"),
           ) ||
-          voices.find((v) => v.name.toLowerCase().includes("microsoft david"));
+          voices.find((v) => v.lang.startsWith("en") && isMale(v));
       }
 
-      utterance.voice =
-        aiVoice || voices.find((v) => v.lang.startsWith("en")) || voices[0];
+      utterance.voice = aiVoice || voices.find((v) => isMale(v)) || voices[0];
 
-      // SMART DIALECT SPEED & PITCH CALIBRATION
-      utterance.pitch = isHindiSpeedMode ? 1.0 : 1.2;
-      // GUARANTEED SPEED LOCK: Native Hindi/Hinglish accelerates to 1.3, Pure English flows at exactly 0.98!
-      utterance.rate = isHindiSpeedMode ? 1.3 : 0.98;
+      // DYNAMIC DIALECT SPEED & CALM PITCH CALIBRATION
+      utterance.pitch = 1.0;
+      if (replyLang === "hinglish") {
+        utterance.rate = 1.08; // Crisp, fluent, natural Hinglish pace
+      } else if (replyLang === "hindi" || containsHindi) {
+        utterance.rate = 1.0; // Fluent native Hindi pace
+      } else {
+        utterance.rate = 0.98; // Relaxed English pace
+      }
       utterance.volume = 1.2;
     } else {
-      // User human voice fallback
       const humanVoice =
-        voices.find(
-          (v) =>
-            v.name.includes("Google UK English Female") ||
-            v.name.includes("Zira") ||
-            v.name.includes("Aria"),
-        ) ||
-        voices.find((v) => v.lang.startsWith("en")) ||
-        voices[0];
+        voices.find((v) => v.lang.startsWith("en")) || voices[0];
       utterance.voice = humanVoice;
-      utterance.pitch = 1.2;
-      utterance.rate = 1.2;
+      utterance.pitch = 1.0;
+      utterance.rate = 1.0;
       utterance.volume = 1.2;
     }
 
-    // Sync Caption with Voice
-    utterance.onboundary = (event) => {
-      if (event.name === "word") {
-        const currentText = text.slice(0, event.charIndex + event.charLength);
-        setLiveCaption(currentText);
-      }
+    // NATURAL REAL-TIME AUDIO VOICE FLOW CAPTION STREAMER
+    let boundaryFired = false;
+    setLiveCaption("");
+
+    // For Hinglish, bypass character-slicing onboundary to eliminate line-blinking state clashes
+    if (replyLang !== "hinglish") {
+      utterance.onboundary = (event) => {
+        if (event.name === "word" && event.charIndex !== undefined) {
+          boundaryFired = true;
+          const spoken = cleanText.slice(0, event.charIndex + (event.charLength || 0));
+          if (spoken) {
+            setLiveCaption(spoken);
+          }
+        }
+      };
+    }
+
+    utterance.onstart = () => {
+      if (captionTimerRef.current) clearInterval(captionTimerRef.current);
+      // Smooth zero-blink word streamer for Hinglish (or backup timer for other engines)
+      setTimeout(() => {
+        if (!boundaryFired) {
+          const words = cleanText.split(/\s+/).filter(Boolean);
+          let currentWordIdx = 0;
+          if (words.length > 0) {
+            setLiveCaption(words[0]);
+            currentWordIdx = 1;
+          }
+          const baseTempo = replyLang === "hinglish" ? 360 : 290;
+          const msPerWord = Math.max(90, Math.floor(baseTempo / (utterance.rate || 1.0)));
+          captionTimerRef.current = setInterval(() => {
+            if (currentWordIdx < words.length) {
+              currentWordIdx++;
+              setLiveCaption(words.slice(0, currentWordIdx).join(" "));
+            } else {
+              clearInterval(captionTimerRef.current);
+            }
+          }, msPerWord);
+        }
+      }, replyLang === "hinglish" ? 0 : 300);
     };
 
     utterance.onend = () => {
-      setLiveCaption(text); // Force full caption at end
+      if (captionTimerRef.current) clearInterval(captionTimerRef.current);
+      setLiveCaption(cleanText); // Ensure 100% full text at completion
       if (onComplete) {
-        // Small buffer to ensure browser has actually finished audio output
-        setTimeout(onComplete, 500);
+        setTimeout(onComplete, 350);
       }
     };
 
-    // Fallback for browsers where onend might fail
     utterance.onerror = (event) => {
       console.error("Speech Error:", event);
+      if (captionTimerRef.current) clearInterval(captionTimerRef.current);
+      setLiveCaption(cleanText);
       if (onComplete) onComplete();
     };
 
@@ -987,17 +1134,21 @@ function DebatePage({ user, onLogout, onStartDebate }) {
 
               <div className="chat-input-area">
                 <div className="input-container">
-                  <input
-                    type="text"
-                    placeholder="Type your argument... (Enter to send)"
+                  <textarea
+                    ref={chatTextareaRef}
+                    rows={1}
+                    placeholder="Type your argument... (Enter to send, Shift+Enter for newline)"
                     value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                    onChange={handleChatTextareaChange}
+                    onKeyDown={handleChatTextareaKeyDown}
                   />
                   <div className="input-actions">
                     <button
                       className="send-btn"
-                      onClick={handleSendMessage}
+                      onClick={() => {
+                        handleSendMessage();
+                        if (chatTextareaRef.current) chatTextareaRef.current.style.height = "auto";
+                      }}
                       aria-label="Send message"
                     >
                       <i className="fas fa-paper-plane" />
@@ -1034,28 +1185,32 @@ function DebatePage({ user, onLogout, onStartDebate }) {
                       />
                     </div>
                   </div>
+                  <div className="participant-footer">
+                    <span className="participant-role">OPPONENT</span>
+                  </div>
                 </div>
 
+                {/* VS Divider */}
                 <div className="vs-divider">
                   {/* DYNAMIC AI LANGUAGE OVERRIDE CONTROLS */}
                   <div className="vs-lang-controls">
                     <button
                       className={`lang-btn ${replyLang === "english" ? "active" : ""}`}
-                      onClick={() => setReplyLang("english")}
+                      onClick={() => handleLangChange("english")}
                       title="english"
                     >
                       🇬🇧 ENG
                     </button>
                     <button
                       className={`lang-btn ${replyLang === "hindi" ? "active" : ""}`}
-                      onClick={() => setReplyLang("hindi")}
+                      onClick={() => handleLangChange("hindi")}
                       title="hindi"
                     >
                       🇮🇳 हिन्दी
                     </button>
                     <button
                       className={`lang-btn ${replyLang === "hinglish" ? "active" : ""}`}
-                      onClick={() => setReplyLang("hinglish")}
+                      onClick={() => handleLangChange("hinglish")}
                       title="hinglish"
                     >
                       🔀 HINGLISH
@@ -1316,13 +1471,6 @@ function DebatePage({ user, onLogout, onStartDebate }) {
                   </div>
                 </div>
               </div>
-
-              <button
-                className="btn-eval btn-back-home"
-                onClick={() => (window.location.href = "/")}
-              >
-                Back to Home
-              </button>
             </div>
 
             {/* Right Section: Detailed Feedback */}
@@ -1330,7 +1478,7 @@ function DebatePage({ user, onLogout, onStartDebate }) {
               <div className="eval-right-header">
                 <h2 className="eval-main-title">Final Evaluation</h2>
                 <p className="eval-main-subtitle">
-                  The AI has concluded its full-spectrum analysis of the debate.
+                  Full-spectrum AI analysis complete.
                 </p>
               </div>
 
@@ -1338,8 +1486,18 @@ function DebatePage({ user, onLogout, onStartDebate }) {
                 <div className="feedback-quote-box">
                   <p>
                     "
-                    {realAnalysis?.feedback ||
-                      "Great effort! You maintained your position well."}
+                    {(() => {
+                      const text =
+                        realAnalysis?.feedback ||
+                        "Great effort! You maintained your position well.";
+                      if (text.length > 90) {
+                        const truncated = text.substring(0, 90);
+                        const lastDot = truncated.lastIndexOf(".");
+                        if (lastDot > 45) return text.substring(0, lastDot + 1);
+                        return truncated.trim() + "...";
+                      }
+                      return text;
+                    })()}
                     "
                   </p>
                 </div>
@@ -1348,26 +1506,38 @@ function DebatePage({ user, onLogout, onStartDebate }) {
                   <div className="feedback-section strengths">
                     <h4 className="feedback-section-title">KEY STRENGTHS</h4>
                     <div className="feedback-list">
-                      {(realAnalysis?.strengths || ["Persuasion"]).map(
-                        (s, i) => (
-                          <div key={i} className="feedback-item">
-                            <span className="check-icon">✓</span> {s}
-                          </div>
-                        ),
-                      )}
+                      {(
+                        realAnalysis?.strengths || [
+                          "Strong Core Arguments",
+                          "Clear Thesis Stance",
+                          "Good Vocabulary",
+                          "Logical Structure",
+                          "Consistent Stance",
+                        ]
+                      ).map((s, i) => (
+                        <div key={i} className="feedback-item">
+                          <span className="check-icon">✓</span> {s}
+                        </div>
+                      ))}
                     </div>
                   </div>
 
                   <div className="feedback-section growth">
                     <h4 className="feedback-section-title">AREAS FOR GROWTH</h4>
                     <div className="feedback-list">
-                      {(realAnalysis?.improvementAreas || ["Logic Depth"]).map(
-                        (a, i) => (
-                          <div key={i} className="feedback-item">
-                            <span className="error-icon">!</span> {a}
-                          </div>
-                        ),
-                      )}
+                      {(
+                        realAnalysis?.improvementAreas || [
+                          "Depth of Logic",
+                          "Counter-evidence Use",
+                          "Rebuttal Timing",
+                          "Premise Elaboration",
+                          "Closing Synthesis",
+                        ]
+                      ).map((a, i) => (
+                        <div key={i} className="feedback-item">
+                          <span className="error-icon">!</span> {a}
+                        </div>
+                      ))}
                     </div>
                   </div>
 
@@ -1404,10 +1574,10 @@ function DebatePage({ user, onLogout, onStartDebate }) {
                   DEBATE AGAIN
                 </button>
                 <button
-                  className="btn-eval btn-back-home mobile-only-btn"
+                  className="btn-eval btn-back-home"
                   onClick={() => (window.location.href = "/")}
                 >
-                  Back to Home
+                  BACK TO HOME
                 </button>
               </div>
             </div>

@@ -1,13 +1,61 @@
 import Groq from "groq-sdk";
 import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load root .env file (2 levels up from server/services/)
+dotenv.config({ path: path.resolve(__dirname, "../../.env") });
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
 dotenv.config();
 
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-});
+const getGroqClient = () => {
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) {
+    throw new Error("GROQ_API_KEY is missing in your root .env file");
+  }
+  return new Groq({ apiKey });
+};
 
-const MODEL_NAME = process.env.GROQ_MODEL || "llama-3.1-8b-instant";
+const getModelName = () => process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
+
+const FALLBACK_MODELS = [
+  process.env.GROQ_MODEL || "llama-3.3-70b-versatile",
+  "llama3-70b-8192",
+  "llama3-8b-8192",
+  "mixtral-8x7b-32768",
+  "gemma2-9b-it",
+];
+
+async function createCompletionWithFallback(params) {
+  const groq = getGroqClient();
+  let lastError = null;
+
+  for (const model of FALLBACK_MODELS) {
+    try {
+      const completion = await groq.chat.completions.create({
+        ...params,
+        model,
+      });
+      return completion;
+    } catch (err) {
+      lastError = err;
+      if (
+        err.status === 429 ||
+        (err.message && err.message.includes("rate_limit_exceeded"))
+      ) {
+        console.warn(
+          `Groq Model ${model} rate limited (429). Falling back to next available model...`,
+        );
+        continue;
+      }
+      throw err;
+    }
+  }
+  throw lastError;
+}
 
 const getSystemInstruction = (topic, aiPosition, difficulty = "Medium", replyLang = "auto") => {
   let difficultyInstructions = "";
@@ -79,6 +127,15 @@ ${dynamicLanguageRule}
    - **### 🧐 Challenge**: End with a sharp, relevant question scaled to their difficulty level.
 8. **Numerical Formatting (CRITICAL)**: NEVER use raw digits like "100" or "2024". ALWAYS write numbers out as full words (e.g., "one hundred" or "ek sau").
 9. **Length Control**: Keep responses around 150-250 words.
+10. **GENDER & PERSONA MANDATE (LANGUAGE-SPECIFIC)**:
+    - **HINDI (Native Devanagari Script - STRICT FEMALE PERSONA ONLY)**:
+      Whenever responding in HINDI (हिंदी देवनागरी), YOU MUST STRICTLY ADOPT A FEMALE PERSONA AND USE FEMININE GENDER GRAMMAR FOR YOURSELF:
+      - ✅ MUST USE FEMALE VERB ENDINGS IN HINDI: "मैं कहना चाहती हूँ", "मैं मानती हूँ", "मैं समझती हूँ", "मैं बताना चाहती हूँ", "मैं सोचती हूँ", "मैं तर्क देना चाहती हूँ"
+      - ❌ STRICTLY FORBIDDEN (MALE VERBS IN HINDI): "मैं कहना चाहता हूँ", "मैं मानता हूँ", "मैं समझता हूँ", "मैं बताता हूँ", "मैं सोचता हूँ"
+    - **HINGLISH & ENGLISH (Latin Script - STRICT MALE PERSONA ONLY)**:
+      Whenever responding in HINGLISH or ENGLISH, YOU MUST STRICTLY ADOPT A MALE PERSONA AND USE MASCULINE GENDER GRAMMAR FOR YOURSELF:
+      - ✅ MUST USE MALE VERB ENDINGS IN HINGLISH: "main kehna chahata hu", "main maanta hu", "main sochta hu", "main batana chahata hu", "main samjhatta hu"
+      - ❌ STRICTLY FORBIDDEN (FEMALE VERBS IN HINGLISH): "main kehna chahati hu", "main maanti hu", "main sochti hu"
 `;
 
   return base;
@@ -91,10 +148,10 @@ export async function getAIReply(userMessage, topic, userPosition, difficulty, h
     const aiPosition = userPosition === "for" ? "against" : "for";
     const systemPrompt = getSystemInstruction(topic, aiPosition, difficulty, replyLang);
 
-    let tailInstruction = "Act as a literal language MIRROR. If input is in Hindi script, respond in native Devnagri Hindi script. If English, respond in English.";
-    if (replyLang === "hindi") tailInstruction = "CRITICAL MANDATE: RESPOND 100% EXCLUSIVELY IN NATIVE HINDI DEVANAGARI SCRIPT (हिंदी देवनागरी लिपि). WRITE EVERY PARAGRAPH, HEADER, AND WORD IN HINDI DEVANAGARI SCRIPT ONLY. DO NOT USE ANY ENGLISH LETTERS OR LATIN ALPHABET AT ALL.";
-    if (replyLang === "english") tailInstruction = "RESPOND 100% IN STANDARD ENGLISH ONLY. ZERO Hindi allowed.";
-    if (replyLang === "hinglish") tailInstruction = "RESPOND 100% IN LATIN-SCRIPT HINGLISH ONLY. ZERO Devnagri allowed.";
+    let tailInstruction = "Act as a literal language MIRROR. If input is in Hindi script, respond in native Devnagri Hindi script using FEMALE persona ('कहना चाहती हूँ'). If English or Hinglish, respond using MALE persona ('kehna chahata hu').";
+    if (replyLang === "hindi") tailInstruction = "CRITICAL MANDATE: RESPOND 100% EXCLUSIVELY IN NATIVE HINDI DEVANAGARI SCRIPT (हिंदी देवनागरी लिपि). ALWAYS USE FEMALE PERSONA GRAMMAR FOR YOURSELF (e.g., 'मैं कहना चाहती हूँ', 'मैं मानती हूँ'). ZERO MALE VERBS ALLOWED FOR HINDI.";
+    if (replyLang === "english") tailInstruction = "RESPOND 100% IN STANDARD ENGLISH ONLY. USE MALE PERSONA.";
+    if (replyLang === "hinglish") tailInstruction = "CRITICAL MANDATE: RESPOND 100% IN LATIN-SCRIPT HINGLISH ONLY. ALWAYS USE MALE PERSONA GRAMMAR FOR YOURSELF (e.g., 'main kehna chahata hu', 'main maanta hu', 'main sochta hu'). ZERO FEMALE VERBS ALLOWED FOR HINGLISH.";
 
     const messages = [
       { role: "system", content: systemPrompt },
@@ -108,10 +165,9 @@ export async function getAIReply(userMessage, topic, userPosition, difficulty, h
       },
     ];
 
-    console.log(`[DEBUG] Calling Groq with model: ${MODEL_NAME}`);
-    const chatCompletion = await groq.chat.completions.create({
+    console.log(`[DEBUG] Calling Groq with model: ${getModelName()}`);
+    const chatCompletion = await createCompletionWithFallback({
       messages: messages,
-      model: MODEL_NAME,
       temperature: 0.7,
       max_tokens: 1024,
       top_p: 1,
@@ -137,12 +193,11 @@ Follow with a short, high-level introduction to the topic "${topic}" to set the 
 Then, present your initial, multi-layered argument as the ${aiPosition.toUpperCase()} stance.
 Use double spacing and emojis.`;
 
-    const chatCompletion = await groq.chat.completions.create({
+    const chatCompletion = await createCompletionWithFallback({
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: prompt },
       ],
-      model: MODEL_NAME,
       temperature: 0.7,
     });
 
@@ -162,6 +217,8 @@ export async function analyzePerformance(history, difficulty = "Medium") {
     1. OBJECTIVITY (NO FLATTERY BIAS): DO NOT automatically favor the user. Conversational models often suffer from "flattery bias"—you MUST avoid this. If the user's arguments were weaker, less articulated, or logically flawed compared to the AI's rebuttals, the AI MUST win (aiScore > userScore). 
     2. AUTHENTICITY: The scores must feel real and earned. If the user argued poorly, do not hesitate to give a failing score (e.g. 30-55). Only exceptional arguments deserve scores above 85%.
     3. COMPARATIVE JUDGING: Weigh the User's logical consistency against the AI's rebuttals. If the User ignored the AI's counter-points, deduct userScore heavily.
+    4. LANGUAGE CONSISTENCY (MANDATORY): Automatically detect the primary language used by the user during the debate (e.g. English, Hinglish, Hindi, Spanish, etc.). You MUST write all evaluation text (the "feedback" paragraph, "strengths" list, "improvementAreas" list, and "fallacies" list) in THAT SAME EXACT PRIMARY LANGUAGE!
+    5. POINT COUNT (MANDATORY): You MUST generate AT LEAST 4 TO 5 distinct points in the "strengths" array, and AT LEAST 4 TO 5 distinct points in the "improvementAreas" array.
     
     CRITICAL: You MUST scale your judging harshness based on the Difficulty Level: "${difficulty.toUpperCase()}".
     
@@ -174,22 +231,21 @@ export async function analyzePerformance(history, difficulty = "Medium") {
     {
       "userScore": 0-100,
       "aiScore": 0-100,
-      "logicScore": 0-100, // Refers specifically to the user's logic metric
-      "persuasionScore": 0-100, // Refers to user's persuasion metric
-      "clarityScore": 0-100, // Refers to user's clarity metric
-      "overallScore": 0-100, // The overall weighted rating for the user (should be close to userScore)
-      "feedback": "A concise, genuine, and completely impartial feedback paragraph explaining WHY the winner won and where the loser fell short.",
-      "strengths": ["specific user strength 1", "specific user strength 2"],
-      "improvementAreas": ["specific user weakness 1", "specific user weakness 2"],
-      "fallacies": ["Named Logical Fallacy 1", "Named Logical Fallacy 2"]
+      "logicScore": 0-100,
+      "persuasionScore": 0-100,
+      "clarityScore": 0-100,
+      "overallScore": 0-100,
+      "feedback": "A concise, genuine, and completely impartial feedback paragraph explaining WHY the winner won and where the loser fell short (in the SAME language as the debate).",
+      "strengths": ["specific strength 1", "specific strength 2", "specific strength 3", "specific strength 4", "specific strength 5"],
+      "improvementAreas": ["specific weakness 1", "specific weakness 2", "specific weakness 3", "specific weakness 4", "specific weakness 5"],
+      "fallacies": ["Named Logical Fallacy 1"]
     }`;
 
-    const chatCompletion = await groq.chat.completions.create({
+    const chatCompletion = await createCompletionWithFallback({
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: `Difficulty: ${difficulty}\nDebate History: ${JSON.stringify(history)}` },
       ],
-      model: MODEL_NAME,
       response_format: { type: "json_object" },
     });
 

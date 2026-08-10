@@ -54,24 +54,26 @@ function DebateModal({ onClose, onSelect }) {
         
         {step === 1 ? (
           <div className="topic-selection-view">
-            <div className="modal-logo-area">
-              <span className="modal-dibot-logo">DiBot.AI✨</span>
-            </div>
-            <h1 className="modal-main-title">CHOOSE YOUR TOPIC</h1>
-            
-            <div className="tab-container">
-              <button 
-                className={`tab-btn trending ${activeTab === 'trending' ? 'active' : ''}`}
-                onClick={() => setActiveTab('trending')}
-              >
-                TRENDING TOPICS
-              </button>
-              <button 
-                className={`tab-btn custom ${activeTab === 'custom' ? 'active' : ''}`}
-                onClick={() => setActiveTab('custom')}
-              >
-                CUSTOM TOPIC
-              </button>
+            <div className="modal-static-header">
+              <div className="modal-logo-area">
+                <span className="modal-dibot-logo">DiBot.AI✨</span>
+              </div>
+              <h1 className="modal-main-title">CHOOSE YOUR TOPIC</h1>
+              
+              <div className="tab-container">
+                <button 
+                  className={`tab-btn trending ${activeTab === 'trending' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('trending')}
+                >
+                  TRENDING TOPICS
+                </button>
+                <button 
+                  className={`tab-btn custom ${activeTab === 'custom' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('custom')}
+                >
+                  CUSTOM TOPIC
+                </button>
+              </div>
             </div>
 
             <div className="topic-scroll-container">

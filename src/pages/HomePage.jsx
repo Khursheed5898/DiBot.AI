@@ -19,9 +19,9 @@ function HomePage({ user, onLogout, onStartDebate }) {
             <div className="hero-content">
               <div className="hero-text">
                 <h1 className="hero-title-animated">
-                  The Transparent 
+                  The Transparent AI
                   <br />
-                  AI Debate Partner
+                  Debate Partner
                 </h1>
                 <p>
                   Sharpen your critical thinking skills through intelligent

@@ -1,6 +1,7 @@
 # DiBot.Ai - Production AWS EC2 Deployment & Maintenance Guide
 
 ## 📌 System & Server Specifications
+
 - **Cloud Infrastructure**: AWS EC2
 - **Operating System**: Amazon Linux 2023
 - **Instance Sizing**: t3.micro (2 vCPU, 1 GB RAM + 2 GB Swap Memory)
@@ -15,6 +16,7 @@
 ## 🚀 Part 1: Initial Deployment (Step-by-Step)
 
 ### Step 1: System Update & Install Node.js 20 LTS
+
 Upgrades Node.js from default v18 to v20 LTS to satisfy dependencies for React Router 7 and Vite 7.
 
 ```bash
@@ -27,6 +29,7 @@ node -v
 ---
 
 ### Step 2: Configure 2GB Swap Memory
+
 Prevents Out-Of-Memory (OOM) crashes during build operations on 1GB RAM instances.
 
 ```bash
@@ -116,6 +119,7 @@ sudo systemctl restart nginx
 ---
 
 ### Step 7: MongoDB Atlas Network Access (IP Whitelist)
+
 1. Go to [cloud.mongodb.com](https://cloud.mongodb.com) -> **Security** -> **Network Access**.
 2. Click **+ Add IP Address**.
 3. Add `0.0.0.0/0` (Allow Access from Anywhere).
@@ -129,8 +133,23 @@ sudo systemctl restart nginx
 
 ## 🔄 Part 2: Future Maintenance & Code Updates
 
-### 1. How to Deploy New Code Updates (Future Changes)
-Whenever you push new changes to GitHub from your local PC, run these 3 commands on EC2 to update live server:
+### 1. How to Deploy New Code Updates
+
+#### Step A: Push changes from Local PC
+
+```bash
+git add .
+git commit -m "Updated UI and animations"
+git push origin master
+```
+
+#### Step B: SSH Connect to EC2 Server
+
+```bash
+ssh -i "d:\DOCUMENTS\B.TECH\8th SEM\Project\DiBot.Ai\my_first_mern.pem" ec2-user@54.234.184.111
+```
+
+#### Step C: Run Update Commands on EC2 Server
 
 ```bash
 cd DiBot.AI
@@ -179,7 +198,9 @@ pm2 restart dibot
 ---
 
 ### 4. Optional: Adding Custom Domain & Free SSL (HTTPS)
+
 If you buy a domain name (e.g. `dibot.ai`):
+
 1. Point your domain's **A Record** to `54.234.184.111`.
 2. Run Certbot to generate a free SSL certificate:
    ```bash

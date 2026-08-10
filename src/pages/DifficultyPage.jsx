@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import RoomSelectionModal from "../components/RoomSelectionModal";
 import "../styles/DifficultyPage.css";
 
 const difficultyCards = [
@@ -56,6 +57,7 @@ function DifficultyPage({ user, onLogout, onStartDebate }) {
   const [position, setPosition] = useState("");
   const [difficulty, setDifficulty] = useState("medium");
   const [rounds, setRounds] = useState(3);
+  const [isRoomModalOpen, setIsRoomModalOpen] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -77,9 +79,15 @@ function DifficultyPage({ user, onLogout, onStartDebate }) {
     if (savedRounds) setRounds(Number(savedRounds));
   }, [navigate]);
 
-  const startDebate = () => {
+  const handleOpenRoomModal = () => {
     localStorage.setItem("debateDifficulty", difficulty);
     localStorage.setItem("debateRounds", String(rounds));
+    setIsRoomModalOpen(true);
+  };
+
+  const handleSelectRoomMode = (mode) => {
+    localStorage.setItem("debateRoomMode", mode);
+    setIsRoomModalOpen(false);
     navigate("/debate");
   };
 
@@ -144,11 +152,20 @@ function DifficultyPage({ user, onLogout, onStartDebate }) {
         </div>
 
         <div className="difficulty-actions">
-           <button className={`btn-proceed ${difficulty}`} onClick={startDebate}>
+           <button className={`btn-proceed ${difficulty}`} onClick={handleOpenRoomModal}>
              ENTER DEBATE ROOM <i className="fas fa-arrow-right" style={{ marginLeft: "6px", fontWeight: "900" }} />
            </button>
         </div>
       </main>
+
+      <RoomSelectionModal
+        isOpen={isRoomModalOpen}
+        onClose={() => setIsRoomModalOpen(false)}
+        onSelectMode={handleSelectRoomMode}
+        topic={topic}
+        position={position}
+        difficulty={difficulty}
+      />
 
       <Footer />
     </div>
