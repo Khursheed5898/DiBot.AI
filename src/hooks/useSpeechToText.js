@@ -8,6 +8,11 @@ const useSpeechToText = (options = {}) => {
         onEnd = null
     } = options;
 
+    // Android Chrome does NOT support true continuous mode — it stops after silence.
+    // Forcing continuous=false on mobile prevents crash-restart loops with empty transcripts.
+    const isMobileUA = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+    const effectiveContinuous = isMobileUA ? false : continuous;
+
     const [isListening, setIsListening] = useState(false);
     const [transcript, setTranscript] = useState("");
     const [error, setError] = useState(null);
@@ -70,7 +75,7 @@ const useSpeechToText = (options = {}) => {
             const rec = new SpeechRecognition();
             rec.lang = lang;
             rec.interimResults = interimResults;
-            rec.continuous = continuous;
+            rec.continuous = effectiveContinuous;
 
             rec.onstart = () => {
                 setIsListening(true);

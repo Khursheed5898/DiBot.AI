@@ -3267,13 +3267,15 @@
 
   /* === Chat Input Area (Mobile) === */
   .chat-input-area {
-    bottom: 8px !important;
+    position: fixed !important;
+    bottom: calc(8px + env(safe-area-inset-bottom, 0px)) !important;
     left: 0 !important;
     right: 0 !important;
     width: 100% !important;
     transform: none !important;
     display: flex !important;
     justify-content: center !important;
+    z-index: 1000 !important;
   }
 
   .input-container {

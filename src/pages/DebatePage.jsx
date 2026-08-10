@@ -165,12 +165,15 @@ function DebatePage({ user, onLogout, onStartDebate }) {
           : "hi-IN",
     onEnd: (finalText) => {
       const content = (finalText || "").trim();
+      // Minimum 4 chars guard: prevents empty or junk restarts from triggering AI
       if (
         content &&
+        content.length >= 4 &&
         !isProcessingRef.current &&
         !content.includes("Listening...") &&
         !content.includes("Click") &&
-        !content.includes("Re-generating")
+        !content.includes("Re-generating") &&
+        !content.includes("Tap START")
       ) {
         handleLiveTurn(content);
       }
@@ -204,8 +207,73 @@ function DebatePage({ user, onLogout, onStartDebate }) {
     }
   }, [speechError]);
 
+  // ── Mobile Keyboard-Aware Input Positioning ──────────────────────────────
+  // When phone keyboard opens, move the input card just above it.
+  // When keyboard closes, restore normal position.
+  useEffect(() => {
+    const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+    if (!isMobile) return;
+
+    const applyViewport = () => {
+      const vv = window.visualViewport;
+      if (!vv) return;
+      // Gap between visual viewport bottom and layout viewport bottom = keyboard height
+      const keyboardHeight = window.innerHeight - vv.height - vv.offsetTop;
+      const inputEl = document.querySelector(".chat-input-area");
+      const liveInputEl = document.querySelector(".live-input-area");
+      const safeOffset = 6; // small breathing gap above keyboard
+      if (keyboardHeight > 50) {
+        // Keyboard is open — lift inputs above it
+        if (inputEl) {
+          inputEl.style.position = "fixed";
+          inputEl.style.bottom = `${keyboardHeight + safeOffset}px`;
+          inputEl.style.left = "0";
+          inputEl.style.right = "0";
+          inputEl.style.zIndex = "9999";
+        }
+        if (liveInputEl) {
+          liveInputEl.style.position = "fixed";
+          liveInputEl.style.bottom = `${keyboardHeight + safeOffset}px`;
+          liveInputEl.style.left = "0";
+          liveInputEl.style.right = "0";
+          liveInputEl.style.zIndex = "9999";
+        }
+      } else {
+        // Keyboard is closed — restore static positioning
+        if (inputEl) {
+          inputEl.style.position = "";
+          inputEl.style.bottom = "";
+          inputEl.style.left = "";
+          inputEl.style.right = "";
+          inputEl.style.zIndex = "";
+        }
+        if (liveInputEl) {
+          liveInputEl.style.position = "";
+          liveInputEl.style.bottom = "";
+          liveInputEl.style.left = "";
+          liveInputEl.style.right = "";
+          liveInputEl.style.zIndex = "";
+        }
+      }
+    };
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", applyViewport);
+      window.visualViewport.addEventListener("scroll", applyViewport);
+    }
+    return () => {
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener("resize", applyViewport);
+        window.visualViewport.removeEventListener("scroll", applyViewport);
+      }
+    };
+  }, []);
+  // ─────────────────────────────────────────────────────────────────────────
+
   // Dynamic Silence Detection for Natural Auto-Submit
   const silenceTimerRef = useRef(null);
+  // Detect mobile for shorter silence window
+  const isMobileDevice = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
 
   // Sync real-time transcript cleanly without premature auto-submitting
   useEffect(() => {
@@ -216,15 +284,18 @@ function DebatePage({ user, onLogout, onStartDebate }) {
 
       if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
 
-      // Generous 5.0-second deep silence buffer so speech is never cut off prematurely
-      if (transcript.trim().length > 15) {
+      // Mobile: 2.5s silence window, Desktop: 5.0s
+      const minChars = isMobileDevice ? 4 : 15;
+      const silenceMs = isMobileDevice ? 2500 : 5000;
+
+      if (transcript.trim().length > minChars) {
         silenceTimerRef.current = setTimeout(() => {
           stopListening();
           const content = transcript.trim();
-          if (content && !isProcessingRef.current) {
+          if (content && content.length >= 4 && !isProcessingRef.current) {
             handleLiveTurn(content);
           }
-        }, 5000);
+        }, silenceMs);
       }
     } else {
       if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
@@ -315,17 +386,18 @@ function DebatePage({ user, onLogout, onStartDebate }) {
         .replace(/Re-generating.*/g, "")
         .trim();
 
-      if (captured.length > 2 && !isProcessingRef.current) {
+      if (captured.length >= 4 && !isProcessingRef.current) {
         handleLiveTurn(captured);
       } else {
-        // SMART FALLBACK IF WEB SPEECH API RETURNED EMPTY (E.G. BROWSER SPEECH RECOGNITION RESTRICTION)
-        const fallbackText =
-          sampleArguments.user[(round - 1) % sampleArguments.user.length] ||
-          "I strongly argue that we must evaluate this topic with logical evidence and human perspective.";
-        setLiveCaption(fallbackText);
-        setTimeout(() => {
-          handleLiveTurn(fallbackText);
-        }, 800);
+        // Speech was empty or too short — show helpful message, do NOT send fake text
+        setLiveCaption(
+          captured.length > 0
+            ? "⚠️ Too short to process. Please speak clearly and try again."
+            : "⚠️ No speech detected. Please tap MIC and speak your argument clearly."
+        );
+        // On mobile, also show the text input as fallback
+        const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+        if (isMobile) setShowLiveTextInput(true);
       }
     } else {
       try {
