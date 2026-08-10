@@ -749,6 +749,15 @@ footer::before {
   text-decoration: none;
 }
 
+/* GitHub Glass Box */
+.social-icon.github {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15);
+  font-size: 0.8rem !important;
+}
+
 /* YouTube Glass Box */
 .social-icon.youtube {
   background: rgba(255, 0, 0, 0.1) !important;
@@ -787,6 +796,12 @@ footer::before {
 
 .social-links a:hover {
   transform: translateY(-3px) scale(1.1) !important;
+}
+
+.social-icon.github:hover {
+  background: rgba(255, 255, 255, 0.25) !important;
+  border-color: rgba(255, 255, 255, 0.6) !important;
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4) !important;
 }
 
 .social-icon.youtube:hover {

@@ -16,17 +16,17 @@ function Footer() {
               education.
             </p>
             <div className="social-links">
-              <a href="https://youtube.com" className="social-icon youtube" aria-label="YouTube" target="_blank" rel="noopener noreferrer">
-                <i className="fab fa-youtube" />
+              <a href="https://github.com/Khursheed5898" className="social-icon github" aria-label="GitHub" target="_blank" rel="noopener noreferrer">
+                <i className="fab fa-github" />
               </a>
-              <a href="https://facebook.com" className="social-icon facebook" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
-                <i className="fab fa-facebook-f" />
-              </a>
-              <a href="https://linkedin.com" className="social-icon linkedin" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
+              <a href="https://linkedin.com/in/khursheed5898" className="social-icon linkedin" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
                 <i className="fab fa-linkedin-in" />
               </a>
-              <a href="https://instagram.com" className="social-icon instagram" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+              <a href="https://instagram.com/khursheed5898" className="social-icon instagram" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
                 <i className="fab fa-instagram" />
+              </a>
+              <a href="https://youtube.com/@khursheed5898" className="social-icon youtube" aria-label="YouTube" target="_blank" rel="noopener noreferrer">
+                <i className="fab fa-youtube" />
               </a>
             </div>
           </div>
