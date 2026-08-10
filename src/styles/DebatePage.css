@@ -3495,7 +3495,7 @@
     justify-content: center !important;
     width: 100% !important;
     order: 2 !important;
-    margin: 18px 0 16px 0 !important;
+    margin: 40px 0 12px 0 !important;
     padding: 2px 0 !important;
   }
 
@@ -3529,9 +3529,15 @@
   }
 
   .live-status-bar {
-    padding: 8px 10px !important;
-    border-radius: 12px !important;
-    margin-top: 4px !important;
+    position: relative !important;
+    bottom: auto !important;
+    left: auto !important;
+    transform: none !important;
+    width: 100% !important;
+    padding: 10px 12px !important;
+    border-radius: 14px !important;
+    margin-top: 24px !important;
+    order: 3 !important;
   }
 
   .status-label {
@@ -3921,7 +3927,7 @@
   }
 
   .vs-divider {
-    margin: 35px 0 12px 0 !important;
+    margin: 40px 0 12px 0 !important;
   }
 
   .lang-btn {
